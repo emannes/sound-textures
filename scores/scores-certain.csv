@@ -1,0 +1,132 @@
+norm_English_ex1,1.2
+norm_ESE-68 Church bells,1.37
+norm_French_ex1,1.4
+norm_SSE-31 Firecrackers,1.47
+norm_Music-mambo_moderno,1.5
+norm_Bongo_Loop2,1.5
+norm_Music-Apache,1.6
+norm_snare_rimshot_sequence,1.6
+norm_SE3-49 Walking On Gravel,1.63
+norm_snare_steel_sequence,1.67
+norm_reverse_snare_sequence,1.7
+norm_corkscrew_against_desk_edge,1.77
+norm_ASE-49 Wind Chimes,1.77
+norm_SE1-59 Railroad Crossing,1.93
+norm_SE3-56 Men Marching,2.17
+norm_ASE-72 IBM Selectric Typewriter,2.27
+norm_SE3-48 Running Up Stairs,2.37
+norm_SE3-40 More Group Laughter,2.47
+norm_Hammering_Copper,2.57
+norm_SE3-50 Jogging On Gravel,2.67
+norm_SE1-87 Old Typewriter,2.7
+norm_SSE-69 Clock Ticking,2.7
+norm_SE4-23 Fire Alarm Bell,2.83
+norm_ASE-03 Knife Sharpening 1,2.83
+norm_ASE-70 Manual Typewriter,2.9
+norm_Metal_file,3
+norm_SE3-91 Large Diner,3.1
+norm_silly_mouth_noise,3.13
+norm_SSE-18 Windshield Wipers,3.23
+norm_SE3-06 Out Of Breath,3.4
+norm_SE2-17 Wild Dogs,3.57
+norm_Running_Breathing,3.6
+norm_SE2-61 Wolves Howling,3.6
+norm_crumpling_paper,3.67
+norm_SSE-94 Hand Saw Sawing Wood,3.67
+norm_applause-foreground_clapper,3.73
+norm_SE2-24 Gallop On Soft Ground,3.77
+norm_gargling,3.77
+norm_SE1-69 Lawn Mower,3.9
+norm_ASE-71 IBM Electric Typewriter,3.97
+norm_CSE-47 Rain beating against window panes,4.03
+norm_rubbing cloth,4.1
+norm_ESE-25 Chickens - Alarmed squawking,4.17
+norm_SE1-41 WWII Battle,4.2
+norm_ESE-11 Ox cart,4.23
+norm_SSE-56 Cement Mixer,4.23
+norm_SE2-29 Horse And Buggy On Bridge,4.27
+norm_Tire_rolling_on_gravel,4.3
+norm_SE1-24 Horse And Carriage,4.37
+norm_ASE-32 Vacuum Cleaner Large Upright,4.37
+norm_SE2-26 Horse Pulling Wagon,4.37
+norm_ESE-35 Seaside - Waves,4.57
+norm_SE2-18 Cat Lapping Milk,4.63
+norm_Applause_rhythmic,4.63
+norm_Tambourine_Shaking,4.67
+norm_chimney_fire,4.7
+norm_Hi-Hats_Rattling,4.73
+norm_SE2-32 Horse Walking In The Snow,4.8
+norm_ASE-74 Electric Adding Machine,4.87
+norm_SE1-55 Ship Anchor Up,4.87
+norm_jingling_keys2,4.87
+norm_SE1-22 Motorcycle,4.97
+norm_SE1-33 Helicopter Fly By,5
+norm_scratching_beard,5.07
+norm_writing-pen_on_paper2,5.07
+norm_CSE-23 Newspaper printing press,5.07
+norm_SE2-25 Horse Trot On Cobblestones,5.1
+norm_SE3-02 Brushing Teeth,5.1
+norm_SE1-53 Idling Boat,5.17
+norm_ASE-94 Jackhammer,5.17
+norm_SE1-37 WWII Bomber,5.2
+norm_CSE-68 Ducks feeding,5.2
+norm_ridged_coin_rolling_spiral,5.2
+norm_SE3-75 Crowd,5.2
+norm_CSE-20 Industrial machinery,5.23
+norm_SSE-42 Surf Hitting Beach,5.27
+norm_Drumroll,5.27
+norm_ASE-57 Hand Sanding,5.3
+norm_ESE-32 Birds in tropical forest,5.3
+norm_ASE-05 Blender,5.3
+norm_ESE-38 Water lapping gently,5.3
+norm_SE2-97 Lake Shore,5.3
+norm_ASE-79 Teletype2,5.3
+norm_SSE-64 Diesel Train,5.4
+norm_SE2-49 Geese Cackling,5.43
+norm_SSE-41 Lapping Waves,5.47
+norm_ASE-54 Metal Lathe,5.5
+norm_ESE-26 Pigeons in town - Cooing,5.53
+norm_ASE-92 Steam Shovel #1,5.57
+norm_ASE-81 City Room Teletype,5.6
+norm_Sander,5.63
+norm_crunching_cellophane,5.63
+norm_shaking_coins,5.67
+norm_ESE-06 Helicopter,5.67
+norm_SE4-96 Spooky Wind,5.7
+norm_CSE-50 Wind moaning,5.7
+norm_babble,5.7
+norm_SE1-25 Bulldozer,5.7
+norm_ASE-08 Bubbling Water,5.83
+norm_ESE-44 Steady rain and thunder,5.83
+norm_burning_room_excerpt,5.83
+norm_Fire_Burning_Room,5.83
+norm_SE2-56 Rattlesnake,5.87
+norm_FG-3_steam_railroad,5.87
+norm_ASE-18 Bath Being Drawn,5.9
+norm_ASE-80 Linotypes,5.9
+norm_Fire_Forest_Inferno,6
+norm_ASE-04 Frying Bacon,6.03
+norm_SE2-82 Rain In The Woods,6.03
+norm_ASE-15 Bathroom Sink,6.1
+norm_ASE-10 Water Running Into Sink,6.1
+norm_CSE-64 Water trickling into pool,6.13
+norm_SSE-81 Rain In Woods,6.17
+norm_CSE-65 Fast running river,6.17
+norm_CSE-22 Pneumatic drills at road works,6.17
+norm_ESE-39 Small river,6.17
+"norm_ESE-23 Sparrows - Large excited group,",6.2
+norm_SE2-89 Waterfall,6.23
+norm_SE1-29 Construction Site Ambience,6.27
+norm_CSE-66 River running over shallows,6.27
+norm_Applause_large,6.27
+norm_ESE-42 Heavy rain falling and dripping,6.3
+norm_SE2-95 Summer Day In The South,6.33
+norm_ASE-04 Frying Eggs,6.37
+norm_ASE-35 Air Conditioner,6.4
+norm_stream near small waterfall,6.4
+norm_SE2-83 Jungle Rain,6.43
+norm_stream,6.43
+norm_Applause_01_big,6.47
+norm_rain,6.53
+norm_SE2-67 Insects In A Swamp,6.57
+norm_ESE-43 Heavy rain on hard surface,6.57
