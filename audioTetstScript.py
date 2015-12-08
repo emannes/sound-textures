@@ -25,42 +25,58 @@ plt.show()
 print len(melspectra)
 print len(melspectra[0])
 
-epsilon = .1
+epsilon = .0001
 
-melEpsilonSparcityMatrix = (melspectra < epsilon)
 
+##### Sparcity - fraction of entries that are zero (or within \epsilon)
+##### We can have Sparcity of a full spectra or the max over time (if it is ever spase in that band).
+
+melEpsilonSparcityMatrix = (melspectra > epsilon)
 melSparcity = melspectra.size - np.count_nonzero(melspectra)
-
 melEpsilonSparcity = float((melEpsilonSparcityMatrix.size - np.count_nonzero(melEpsilonSparcityMatrix)))/melEpsilonSparcityMatrix.size
-
-print "size", melspectra.size
-print "Melspectra epsilon sparcity for epsilon = ", epsilon, " is ", melEpsilonSparcity
 
 melSpectraMin = np.amin(melSparcity)
 
+print "size", melspectra.size
 print "Minimum Melspectra element", melSpectraMin
-
 print "melspectra number of zero entries", melSparcity
+print "Melspectra epsilon sparcity for epsilon = ", epsilon, " is ", melEpsilonSparcity
 
-melave = np.mean(melspectra, axis=0)
-melSparcityTimeAve = len(melave) - np.count_nonzero(melave)
-print "len of melave = ", len(melave)
-print "number of nonzero entries of the melspectra average values", melSparcityTimeAve
+melSpectraMax = np.amax(melspectra, axis=1)
+melSpectraBandSparcityMatrix = (melSpectraMax > epsilon)
+melBandSparcity = float(len(melSpectraMax) - np.count_nonzero(melSpectraBandSparcityMatrix))/len(melSpectraMax)
+
+print "Band sparcity for mel spectra: ", melBandSparcity
 
 
+melave = np.mean(melspectra, axis=1)
+melAveSpectraBandSparcityMatrix = (melave > epsilon)
+melSparcityTimeAve = float(len(melave) - np.count_nonzero(melAveSpectraBandSparcityMatrix))/len(melave)
 
+
+print "Band sparcity based on ave mel spectra: ", melSparcityTimeAve
+
+print "Mel spectra: "
 #plt.specgram(melspectra, NFFT = 302)
 plt.pcolormesh(melspectra)
-#plt.show()
+plt.show()
 
+print "Average Spectra: "
 plt.specgram(melave)
-#plt.show()
+plt.show()
+
+
+
+
+
+
+
+
 
 print len(frequencyDomain)
 print len(frequencyDomain[0])
 
 #plt.specgram(frequencyDomain, NFFT = 302)
-plt.pcolormesh(frequencyDomain)
-#plt.show()
+##plt.show()
 
-print len(f)
+#print len(f)
