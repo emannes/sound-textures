@@ -18,8 +18,6 @@ def ExtractTemporalSparcity(filename, epsilon=defaultEpsilon):
     timeEpsilonSparcityMatrix = (f > epsilon)
     timeEpsilonSparcity = float(f.size-np.count_nonzero(timeEpsilonSparcityMatrix))/f.size
     
-        
-    
     return timeEpsilonSparcity
 
 def ExtractMelSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):

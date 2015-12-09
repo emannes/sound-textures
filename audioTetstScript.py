@@ -9,14 +9,30 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 
-f, sr = librosa.load("Final_Set5_Norm_Originals/norm_Applause_01_big.wav")
 
-def calculateTimeHomogeneity(filename, f, windowSize):
+filename = "Final_Set5_Norm_Originals/norm_Applause_01_big.wav"
+f, sr = librosa.load(filename)
+
+
+##calculates the Time Homogineity of the function f given a base window size
+##func accepts a time searies and retuns a number.
+def calculateTimeHomogeneity(filename, func, windowSize):
+    f, sr = librosa.load(filename)
+
+    fArray = []
+    for i in range(f.size - windowSize):
+        fArray.append(func(f[i:i+windowSize]))
     
+    funcTotal = func(f)
+    
+    funcVar = 0
+    for i in fArray:
+        funcVar += (i-funcTotal)**2
+    funcVar /= len(fArray)
 
+    return funcVar
 
-
-
+print calculateTimeHomogeneity(filename, np.mean, f.size/100)
 #rmsenergy = librosa.feature.rmse(y=f)
 #melspectra = librosa.feature.melspectrogram(f)
 #frequencyDomain = librosa.stft(f)
