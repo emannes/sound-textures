@@ -199,4 +199,3 @@ def calculateSpectraSkewTimeHomogienity(filename, spectraTransform, windowSize):
 
 def calculateSpectraKurtosisTimeHomogienity(filename, spectraTransform, windowSize):
     return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
-    

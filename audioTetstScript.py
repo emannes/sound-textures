@@ -34,7 +34,7 @@ def calculateTimeHomogeneity(filename, func, windowSize):
 
     return funcVar
 
-print calculateTimeHomogeneity(filename, np.mean, f.size/100)
+#print calculateTimeHomogeneity(filename, np.mean, f.size/100)
 #print calculateTimeHomogeneity(filename, featureExtract.ExtractMelSpectraSparcityFeatures, f.size/100)
 
 def calculateRMSETimeHomogeneity(filename):
@@ -56,7 +56,26 @@ def calculateRMSETimeHomogeneity(filename):
 
     
 
-print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+#print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+
+
+def calculateKOrderStatistic(filename, k):
+    f, sr = librosa.load(filename)
+    return scipy.stats.kstat(f,k)
+    
+def calculateVarKOrderStatistic(filename, k):
+    f, sr = librosa.load(filename)
+    return scipy.stats.kstatvar(f,k)
+
+print calculateKOrderStatistic(filename, 1)
+print calculateVarKOrderStatistic(filename, 1)
+print calculateKOrderStatistic(filename, 2)
+print calculateVarKOrderStatistic(filename, 2)
+print calculateKOrderStatistic(filename, 3)
+print calculateVarKOrderStatistic(filename, 3)
+print calculateKOrderStatistic(filename, 4)
+print calculateVarKOrderStatistic(filename, 4)
+
 #rmsenergy = librosa.feature.rmse(y=f)
 #melspectra = librosa.feature.melspectrogram(f)
 #frequencyDomain = librosa.stft(f)
@@ -126,3 +145,78 @@ print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
 ##plt.show()
 
 #print len(f)
+
+
+
+
+
+
+
+
+#def calculateSpectraAverageTimeHomogineity(filename, spectraTransform, windowSize):
+#    f, sr = librosa.load(filename)
+#
+#    fSpectra = spectraTransform(f)
+#
+#    fSpectraAve = []
+#    fArray = []
+#    for i in range(len(fSpectra)):
+#        fSpectraAve.append(np.mean(fSpectra[i]))
+#        fArray.append([])
+#        for j in range(fSpectra[i].size - windowSize):
+#            fArray[i].append(np.mean(fSpectra[i][j:j+windowSize]))
+#    #print "fSpectraAve ", fSpectraAve
+#    print len(fSpectraAve)
+#    print fSpectra.shape
+#    fSpectraVar = []
+#    for i in range(len(fSpectraAve)):
+#        fSpectraVar.append(0)
+#        for j in fSpectra[i]:
+#            fSpectraVar[i] += (j-fSpectraAve[i])**2
+#        fSpectraVar[i] /= len(fSpectra[i])
+#
+#    print len(fSpectraVar)
+#    return fSpectraVar
+#
+##print calculateSpectraAverageTimeHomogineity(filename, librosa.stft, 10)
+##print calculateSpectraAverageTimeHomogineity(filename, librosa.cqt, 10)
+##print calculateSpectraAverageTimeHomogineity(filename, librosa.feature.melspectrogram, 10)
+#
+#def calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, statistic, windowSize):
+#    f, sr = librosa.load(filename)
+#
+#    fSpectra = spectraTransform(f)
+#
+#    fSpectraAve = []
+#    fArray = []
+#    for i in range(len(fSpectra)):
+#        fSpectraAve.append(statistic(fSpectra[i]))
+#        fArray.append([])
+#        for j in range(fSpectra[i].size - windowSize):
+#            fArray[i].append(statistic(fSpectra[i][j:j+windowSize]))
+#    #print "fSpectraAve ", fSpectraAve
+#    print len(fSpectraAve)
+#    print fSpectra.shape
+#    fSpectraVar = []
+#    for i in range(len(fSpectraAve)):
+#        fSpectraVar.append(0)
+#        for j in fSpectra[i]:
+#            fSpectraVar[i] += (j-fSpectraAve[i])**2
+#        fSpectraVar[i] /= len(fSpectra[i])
+#
+#    print len(fSpectraVar)
+#    return fSpectraVar
+#    
+#def calculateSpectraVarianceTimeHomogienity(filename, spectraTransform, windowSize):
+#    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, np.var, windowSize)   
+#    
+##print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+#
+#def calculateSpectraSkewTimeHomogienity(filename, spectraTransform, windowSize):
+#    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.skews, windowSize)   
+#    
+##print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+#
+#def calculateSpectraKurtosisTimeHomogienity(filename, spectraTransform, windowSize):
+#    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
+#    
