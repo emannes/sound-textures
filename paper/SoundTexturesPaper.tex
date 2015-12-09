@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{amsmath, amssymb, amsthm, amsfonts,cite,alltt,clrscode}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{accents}
+\usepackage[list=true,listformat=simple]{subcaption}
+\usepackage{color,colortbl}
+\definecolor{almond}{rgb}{0.94, 0.87, 0.8}
+\usepackage{hyperref}
+
+% For maintaining extended abstract and full versions of a paper.
+% Usage: \ifabstract short text [\else long  text] \fi
+%        \iffull     long  text [\else short text] \fi
+% Uncomment the line ``\abstractfalse'' to enable the full version.
+\newif\ifabstract
+%\abstracttrue
+\abstractfalse
+\newif\iffull
+\ifabstract \fullfalse \else \fulltrue \fi
+
+\ifabstract  %squish
+\usepackage{times}
+
+% Compact mainlevel section titles, using \paragraph's while keeping numbering,
+% but without \appendix support.
+{\makeatletter
+ \gdef\section{\@ifnextchar*\section@star\section@normal}
+ \gdef\section@normal#1{\refstepcounter{section}%
+   \paragraph{\arabic{section}\hbox{~~}#1.}%
+   \addcontentsline{toc}{section}{\protect\numberline{\arabic{section}}{#1}}}
+ \gdef\section@star*#1{\paragraph{#1.}}}
+
+% Compact subsection titles, using \paragraph's while keeping numbering.
+{\makeatletter
+ \gdef\subsection{\@ifnextchar*\subsection@star\subsection@normal}
+ \gdef\subsection@normal#1{\refstepcounter{subsection}%
+   \paragraph{\thesubsection\hbox{~~}#1.}%
+   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}{#1}}}
+ \gdef\subsection@star*#1{\paragraph{#1.}}}
+
+% Redefine paragraph to have no leading space, but rather indent.
+%{\makeatletter
+% \gdef\paragraph{\@startsection{paragraph}{4}{\parindent}{-0pt}{-1em}
+%   {\normalfont\normalsize\bfseries}}}
+
+% Tighter version of just \paragraph.
+\newlength\aboveparagraphskip
+\aboveparagraphskip=3.25ex plus 1ex minus .2ex
+\newlength\belowparagraphskip
+\belowparagraphskip=-1em
+\makeatletter
+\def\paragraph{\@startsection{paragraph}{4}{\z@}{-\aboveparagraphskip}%
+                 {\belowparagraphskip}{\normalfont\normalsize\bfseries}}
+\makeatother
+\aboveparagraphskip=.5ex plus .5ex minus .25ex
+
+\fi
+
+\urlstyle{same}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\ul}[1] {\underline{#1}}
+
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+% Complex \xxx for making notes of things to do.  Use \xxx{...} for general
+% notes, and \xxx[who]{...} if you want to blame someone in particular.
+% Puts text in brackets and in bold font, and normally adds a marginpar
+% with the text ``xxx'' so that it is easy to find.  On the other hand, if
+% the comment is in a minipage, figure, or caption, the xxx goes in the text,
+% because marginpars are not possible in these situations.
+{\makeatletter
+ \gdef\xxxmark{%
+   \expandafter\ifx\csname @mpargs\endcsname\relax % in minipage?
+     \expandafter\ifx\csname @captype\endcsname\relax % in figure/caption?
+       \marginpar{xxx}% not in a caption or minipage, can use marginpar
+     \else
+       xxx % notice trailing space
+     \fi
+   \else
+     xxx % notice trailing space
+   \fi}
+ \gdef\xxx{\@ifnextchar[\xxx@lab\xxx@nolab}
+ \long\gdef\xxx@lab[#1]#2{\textbf{[\xxxmark #2 ---{\sc #1}]}}
+ \long\gdef\xxx@nolab#1{\textbf{[\xxxmark #1]}}
+ % This turns them off:
+ %\long\gdef\xxx@lab[#1]#2{}\long\gdef\xxx@nolab#1{}%
+}
+
+{\catcode`\^^M=\active \gdef\tablines{\catcode`\^^M=\active \def^^M{\\}}}
+\newenvironment{pcode}{\tablines \topsep=0pt \partopsep=0pt \tabbing
+   MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=\kill}
+  {\endtabbing\vspace*{-0\baselineskip}}
+{\makeatletter \gdef\lasttab{\ifnum \@curtab<\@hightab \>\lasttab\fi}}
+
+% Compact list environments.  Note that itemize* and enumerate* use the
+% same counters and symbols as the usual itemize and enumerate environments.
+\def\compactify{\itemsep=0pt \topsep=0pt \partopsep=0pt \parsep=0pt}
+\let\latexusecounter=\usecounter
+\newenvironment{itemize*}
+  {\begin{itemize}\compactify}
+  {\end{itemize}}
+\newenvironment{enumerate*}
+  {\def\usecounter{\compactify\latexusecounter}
+   \begin{enumerate}}
+  {\end{enumerate}\let\usecounter=\latexusecounter}
+\newenvironment{description*}
+  {\begin{description}\compactify}
+  {\end{description}}
+
+% Put figures and text together
+\def\textfraction{0.01}
+\def\topfraction{0.99}
+\def\dbltopfraction{0.99}
+\def\bottomfraction{0.99}
+\def\floatpagefraction{0.99}
+\def\dblfloatpagefraction{0.99}
+\def\dbltopnumber{100}
+
+% Fonts
+\def\id#1{\textit{#1}}
+\def\proc#1{\textsc{#1}}
+\let\epsilon=\varepsilon
+\let\keyw=\textbf
+
+%\newcommand{\lone}{l_{1/2}}
+%\newcommand{\ltwo}{l_{2/2}}
+\newcommand{\lone}{L[0\mathbin{:}\frac{n}{2}]}
+\newcommand{\ltwo}{L[\frac{n}{2}+1\mathbin{:}n-1]}
+\newcommand{\lsuper}{L}
+\newcommand{\lrtos}{\lsuper[r\mathbin{:}s]}
+\newcommand{\lstot}{\lsuper[s+1\mathbin{:}t]}
+\newcommand{\lrtot}{\lsuper[r\mathbin{:}t]}
+\newcommand{\lprime}{L'}
+\newcommand{\lprtot}{L'[r:t]}
+
+\begin{document}
+
+\title{Discriminating Sound Textures}
+\author{%
+  Jayson Lynch%
+    \thanks{MIT Computer Science and Artificial Intelligence Laboratory,
+      32 Vassar Street, Cambridge, MA 02139, USA,
+      \protect\url{{jaysonl}@mit.edu}.}
+\and
+  Eric Mannes%  
+  \thanks{MIT Computer Science and Artificial Intelligence Laboratory,
+      32 Vassar Street, Cambridge, MA 02139, USA,
+      \protect\url{{mannes}@mit.edu}.}
+}
+\date{\today}
+\maketitle
+\begin{abstract}
+
+We show sound textures are cool stuff.
+
+\end{abstract}
+
+\textbf{Keywords:} Machine Learning, Sound Textures, Audition
+
+\thispagestyle{empty}
+\setcounter{page}{-1}
+\pagebreak
+
+\tableofcontents 
+\vfil
+\clearpage
+
+%\listoffigures 
+%\pagebreak
+
+%\listoftables
+%\pagebreak
+
+\section{Introduction} 
+
+\paragraph{Stuff}
+
+\xxx{Cite McDermott's papers\cite{McDermott2011926, mcdermott2013summary} and why we care about these features/classification}
+
+\xxx{Cite some other audio/sound texture classification work.}
+
+\section{Definitions}
+
+\xxx{Give formal and informal definitions of the features we used}
+
+\section{Methods}
+
+\xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
+
+\section{Results}
+
+\xxx{What coorilated and what didn't? What feature (ensemble) lead to a good classifier?}
+
+\section{Conclusion}
+
+\xxx{Speculate if these could be useful features in audio classification. Speculate about the implication to human audition. Give future directions.}
+
+\section*{Acknowledgments}
+
+We thank Prof Josh McDermott for his support in answering our questions about their research and providing us with their dataset. We also thank the course staff of 6.867 for their instruction and support this semester. In particular, we appreciate Marzyeh Ghassemi advice and guidance in shaping our project plan.
+
+% Decrease the space between bibliography items.
+\let\realbibitem=\bibitem
+\def\bibitem{\par \vspace{-1.5ex}\realbibitem}
+
+% bibliography
+\bibliographystyle{alpha}
+\bibliography{SoundTexturesBib}
+\end{document}
+
