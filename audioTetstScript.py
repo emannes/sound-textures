@@ -9,6 +9,7 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import audioFeatureExtractionFunctions as featureExtract
+import scipy
 
 
 filename = "Final_Set5_Norm_Originals/norm_Applause_01_big.wav"
@@ -51,9 +52,11 @@ def calculateRMSETimeHomogeneity(filename):
     
     return rmseVar
     
-print calculateRMSETimeHomogeneity(filename)
+#print calculateRMSETimeHomogeneity(filename)
 
+    
 
+print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
 #rmsenergy = librosa.feature.rmse(y=f)
 #melspectra = librosa.feature.melspectrogram(f)
 #frequencyDomain = librosa.stft(f)
