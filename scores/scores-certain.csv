@@ -9,9 +9,12 @@ norm_snare_rimshot_sequence,1.6
 norm_SE3-49 Walking On Gravel,1.63
 norm_snare_steel_sequence,1.67
 norm_reverse_snare_sequence,1.7
+norm_rhythm_1_2_3,1.7
 norm_corkscrew_against_desk_edge,1.77
 norm_ASE-49 Wind Chimes,1.77
+norm_rhythm_1_2,1.9
 norm_SE1-59 Railroad Crossing,1.93
+norm_tapping_nonrhythmic2,2
 norm_SE3-56 Men Marching,2.17
 norm_ASE-72 IBM Selectric Typewriter,2.27
 norm_SE3-48 Running Up Stairs,2.37
@@ -45,6 +48,7 @@ norm_SE1-41 WWII Battle,4.2
 norm_ESE-11 Ox cart,4.23
 norm_SSE-56 Cement Mixer,4.23
 norm_SE2-29 Horse And Buggy On Bridge,4.27
+norm_SE1-62 Steam Engine,4.27
 norm_Tire_rolling_on_gravel,4.3
 norm_SE1-24 Horse And Carriage,4.37
 norm_ASE-32 Vacuum Cleaner Large Upright,4.37
@@ -60,7 +64,10 @@ norm_ASE-74 Electric Adding Machine,4.87
 norm_SE1-55 Ship Anchor Up,4.87
 norm_jingling_keys2,4.87
 norm_SE1-22 Motorcycle,4.97
+norm_pouring_coins,4.97
+norm_SE2-91 The Forest,4.97
 norm_SE1-33 Helicopter Fly By,5
+norm_steam_engine2,5
 norm_scratching_beard,5.07
 norm_writing-pen_on_paper2,5.07
 norm_CSE-23 Newspaper printing press,5.07
@@ -92,6 +99,7 @@ norm_Sander,5.63
 norm_crunching_cellophane,5.63
 norm_shaking_coins,5.67
 norm_ESE-06 Helicopter,5.67
+norm_SE2-96 New England Day,5.67
 norm_SE4-96 Spooky Wind,5.7
 norm_CSE-50 Wind moaning,5.7
 norm_babble,5.7
@@ -121,7 +129,10 @@ norm_CSE-66 River running over shallows,6.27
 norm_Applause_large,6.27
 norm_ESE-42 Heavy rain falling and dripping,6.3
 norm_SE2-95 Summer Day In The South,6.33
+norm_CSE-48 Wind whistling,6.33
+norm_CSE-49 Wind whistling,6.33
 norm_ASE-04 Frying Eggs,6.37
+norm_ESE-29 Tropical Night short,6.37
 norm_ASE-35 Air Conditioner,6.4
 norm_stream near small waterfall,6.4
 norm_SE2-83 Jungle Rain,6.43
