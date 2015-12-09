@@ -9,7 +9,20 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 
-def ExtractMelSpectraSparcityFeatures(filename, epsilon):
+defaultEpsilon = 10**-4
+
+def ExtractTemporalSparcity(filename, epsilon=defaultEpsilon):
+    
+    f, sr = librosa.load(filename)
+    
+    timeEpsilonSparcityMatrix = (f > epsilon)
+    timeEpsilonSparcity = float(f.size-np.count_nonzero(timeEpsilonSparcityMatrix))/f.size
+    
+        
+    
+    return timeEpsilonSparcity
+
+def ExtractMelSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     f, sr = librosa.load(filename)    
     
@@ -41,7 +54,7 @@ def ExtractMelSpectraSparcityFeatures(filename, epsilon):
     
     return melEpsilonSparcity, melBandSparcity, melBandSparcityTimeAve
 
-def ExtractCQSpectraSparcityFeatures(filename, epsilon):
+def ExtractCQSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     f, sr = librosa.load(filename)    
     
@@ -74,7 +87,7 @@ def ExtractCQSpectraSparcityFeatures(filename, epsilon):
     return cqtEpsilonSparcity, cqtBandSparcity, cqtBandSparcityTimeAve
     
     
-def ExtractSTFTSpectraSparcityFeatures(filename, epsilon):
+def ExtractSTFTSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     f, sr = librosa.load(filename)    
     
