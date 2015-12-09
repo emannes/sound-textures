@@ -117,3 +117,19 @@ def ExtractSTFTSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     return stftEpsilonSparcity, stftBandSparcity, stftBandSparcityTimeAve
 
+def calculateRMSETimeHomogeneity(filename):
+    f, sr = librosa.load(filename)
+    
+    rmse = librosa.feature.rmse(f)
+    
+    rmseAve = np.mean(rmse)
+    
+    rmseVar = 0
+    for i in rmse[0]:
+        #print i
+        rmseVar += (i-rmseAve)**2
+    rmseVar /= len(rmse)
+    
+    return rmseVar
+    
+    
