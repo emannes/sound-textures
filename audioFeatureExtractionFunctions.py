@@ -40,3 +40,69 @@ def ExtractMelSpectraSparcityFeatures(filename, epsilon):
     print "Epsilon Band sparcity based on ave mel spectra: ", melBandSparcityTimeAve
     
     return melEpsilonSparcity, melBandSparcity, melBandSparcityTimeAve
+
+def ExtractCQSpectraSparcityFeatures(filename, epsilon):
+    
+    f, sr = librosa.load(filename)    
+    
+    cqtspectra = librosa.cqt(f)   
+    
+    ##### Sparcity - fraction of entries that are zero (or within \epsilon)
+    ##### We can have Sparcity of a full spectra or the max over time (if it is ever spase in that band).
+    
+    cqtEpsilonSparcityMatrix = (cqtspectra > epsilon)
+    cqtSparcity = cqtspectra.size - np.count_nonzero(cqtspectra)
+    cqtEpsilonSparcity = float((cqtEpsilonSparcityMatrix.size - np.count_nonzero(cqtEpsilonSparcityMatrix)))/cqtEpsilonSparcityMatrix.size
+    
+    print "size", cqtspectra.size
+    print "cqtspectra epsilon sparcity for epsilon = ", epsilon, " is ", cqtEpsilonSparcity
+    
+    cqtSpectraMax = np.amax(cqtspectra, axis=1)
+    cqtSpectraBandSparcityMatrix = (cqtSpectraMax > epsilon)
+    cqtBandSparcity = float(len(cqtSpectraMax) - np.count_nonzero(cqtSpectraBandSparcityMatrix))/len(cqtSpectraMax)
+    
+    print "Epsilon Band sparcity for cqt spectra: ", cqtBandSparcity
+    
+    
+    cqtave = np.mean(cqtspectra, axis=1)
+    cqtAveSpectraBandSparcityMatrix = (cqtave > epsilon)
+    cqtBandSparcityTimeAve = float(len(cqtave) - np.count_nonzero(cqtAveSpectraBandSparcityMatrix))/len(cqtave)
+    
+    
+    print "Epsilon Band sparcity based on ave cqt spectra: ", cqtBandSparcityTimeAve
+    
+    return cqtEpsilonSparcity, cqtBandSparcity, cqtBandSparcityTimeAve
+    
+    
+def ExtractSTFTSpectraSparcityFeatures(filename, epsilon):
+    
+    f, sr = librosa.load(filename)    
+    
+    stftspectra = librosa.stft(f)   
+    
+    ##### Sparcity - fraction of entries that are zero (or within \epsilon)
+    ##### We can have Sparcity of a full spectra or the max over time (if it is ever spase in that band).
+    
+    stftEpsilonSparcityMatrix = (stftspectra > epsilon)
+    stftSparcity = stftspectra.size - np.count_nonzero(stftspectra)
+    stftEpsilonSparcity = float((stftEpsilonSparcityMatrix.size - np.count_nonzero(stftEpsilonSparcityMatrix)))/stftEpsilonSparcityMatrix.size
+    
+    print "size", stftspectra.size
+    print "stftspectra epsilon sparcity for epsilon = ", epsilon, " is ", stftEpsilonSparcity
+    
+    stftSpectraMax = np.amax(stftspectra, axis=1)
+    stftSpectraBandSparcityMatrix = (stftSpectraMax > epsilon)
+    stftBandSparcity = float(len(stftSpectraMax) - np.count_nonzero(stftSpectraBandSparcityMatrix))/len(stftSpectraMax)
+    
+    print "Epsilon Band sparcity for stft spectra: ", stftBandSparcity
+    
+    
+    stftave = np.mean(stftspectra, axis=1)
+    stftAveSpectraBandSparcityMatrix = (stftave > epsilon)
+    stftBandSparcityTimeAve = float(len(stftave) - np.count_nonzero(stftAveSpectraBandSparcityMatrix))/len(stftave)
+    
+    
+    print "Epsilon Band sparcity based on ave stft spectra: ", stftBandSparcityTimeAve
+    
+    return stftEpsilonSparcity, stftBandSparcity, stftBandSparcityTimeAve
+
