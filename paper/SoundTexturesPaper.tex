@@ -199,6 +199,12 @@ Given a compression scheme, the {\em compression rate} of a file is equal to \[\
 
 How to define sparsity was slightly less clear, since it usually refers to the quantity of zero entries with respect to some basis. To overcome this, we decided to use several natural representations. We looked at sparsity in the time domain with respect to the actual time series of the audio sample. We also looked at the sparsity in the frequency domain under both uniform and log-scale transforms. To be more precise, we took short-term Fourier transforms, constant q transforms, and Mel transforms of the time series (using the implementations in the Python library Librosa\cite{mcfee2015librosa}) and counted the ratio of entries near zero. Due to noise and precision error, we assumed an entry was empty if the magnitude of the value was less than $10^{-5}$. There are also algorithms for extracting low rank matrices assuming one has sampled from noisy data\cite{negahban2011estimation}. We would have liked to have implemented and run one of these algorithms, using the derived rank as a measure of sparsity, but we did not have time to extract this feature.
 
+The Short Term Fourier Transform attempts to compute the Discrete Fourier Transform at every point for a changing signal by computing the DFT over a small sliding window. The STFT at a time $n$ with a window size $\omega$ can be expressed as $$STFT(x,\omega) = \Sigma_{m=-\infty}^\infty x[m]w[n-m]e^{-j\omega n}$$ where $x[i]$ and $w[i]$ are points in our signal\cite{STFT}.
+
+The Constant Q and Mel Transforms are analogs to the Fourier Transform, but end up with a logarithmic spacing in the frequency domain, making them behave more like human auditory signal processing. We refer the reader to Judith Brown's paper\cite{brown1991calculation} for details on the Constant Q Transform and to Saha and Sahidullah's paper\cite{Sahidullah2012543} for details on the Mel Transform, as well as the Librosa source code\footnote{\url{https://github.com/bmcfee/librosa}} for their specific implementation details.
+
+
+
 \subsection{Temporal Homogeneity}
 Temporal homogeneity refers to consistency in the signal over time. Obviously we can't have everything be exactly the same, so one must pick specific features with which to check consistency. A paper on visual textures provides a precise definition\cite{portilla2000parametric}.
 \begin{definition}
