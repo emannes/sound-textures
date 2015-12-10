@@ -10,8 +10,9 @@ import cProfile
 from sklearn import linear_model
 from sklearn import preprocessing
 import cPickle as pickle
+import matplotlib as pyplot
 
-MAX_FEATURES = 100
+MAX_FEATURES = 10
 
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
 moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
@@ -53,6 +54,14 @@ def lasso(training, validation, alpha):
     model.fit(training[:,:MAX_FEATURES], training[:, -1])
     print model.score(validation[:,:MAX_FEATURES], validation[:, -1])
     return model
+
+def lasso2(training, validation, alpha,i):
+    model = linear_model.Lasso(alpha=alpha)
+    model.fit(training[:,i:i+1], training[:, -1])
+#    print model.score(validation[:,i:i+1], validation[:, -1])
+    return model
+
+
 """
 fvs = [feature_vector(base_name) for base_name in base_names]
 #fvs = preprocessing.scale(fvs, axis=1)
@@ -79,5 +88,55 @@ val_len = len(fvs)/4
 
 fvs = np.random.permutation(fvs)
 
+fvs = np.delete(fvs, [0,12], axis=1)
+
+#fvs = np.delete(fvs, 12, 1)
+#fvs = np.delete(fvs, 0, 1)
+validation = fvs[tr_len:tr_len + val_len]
+
 alphas = [10** i for i in range(-8,10)]
-models = [lasso(fvs[:tr_len], fvs[tr_len:tr_len + val_len], alpha) for alpha in alphas]
+models = [lasso(fvs[:tr_len], fvs[tr_len:tr_len + val_len,], alpha) for alpha in alphas]
+
+
+
+"""
+for i in [0, 12]:
+    model = lasso2(fvs[:tr_len], fvs[tr_len:tr_len + val_len], 0.0, i)
+#    print model.score(fvs[tr_len:,i:i+1], fvs[tr_len:,-1])
+#    print [model.score(validation[:,i:i+1], validation[:, -1]) for model in models]
+
+scores = []
+i=0
+trials = 1000
+for j in xrange(trials):
+    fvs = np.random.permutation(fvs)
+    model = lasso2(fvs[:tr_len], fvs[tr_len:tr_len + val_len], 0.0, i)
+    scores.append(model.score(fvs[tr_len:,i:i+1], fvs[tr_len:,-1]))
+print sum(scores)/trials
+    
+for i in range(7502):
+
+    if max([model.score(validation[:,i:i+1], validation[:, -1]) for model in models]) > .3:
+        print i
+#
+"""
+### Volume plots:
+"""
+plt.scatter(fvs[:,12], fvs[:,-1])
+plt.xlabel("RMS time homogeneity")
+plt.ylabel("Texture realism scores")
+plt.savefig("figures/rms_time_homogeneity.png")
+plt.gcf().clear()
+
+plt.scatter(fvs[:,0], fvs[:,-1])
+plt.xlabel("RMS energy")
+plt.ylabel("Texture realism scores")
+plt.savefig("figures/rms_energy.png")
+plt.gcf().clear()
+
+plt.scatter(fvs[:,0], fvs[:,12])
+plt.xlabel("RMS energy")
+plt.ylabel("RMS time homogeneity")
+plt.savefig("figures/rms_homogeneity_vs_energy.png")
+plt.gcf().clear()
+"""
