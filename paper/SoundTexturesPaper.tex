@@ -188,7 +188,7 @@ McDermott and Simoncelli work shows that for many sound textures, the salient fe
 \label{sec:definitions}
 We provide working definitions for examples of three main descriptors: sparsity, compressibility, and temporal homogeneity. Since these characteristics can be captured in different ways, which are not always equivalent, we choose to work with multiple formal definitions.
 
-Compressibility was the simplest to work out. We chose a standard lossy and lossless compression algorithm and measured the compression ratio for the .wav flies. In this case we used \xxx{what audio compression did we use?}
+Compressibility was the simplest to work out. We chose a standard lossy compression algorithm and measured the compression ratio for the .wav flies. In this case we used the Ogg Vorbis variable-bitrate compression format.
 
 How to define sparsity was slightly less clear, since it usually refers to the quantity of zero entries with respect to some basis. To overcome this, we decided to use several natural representations. We looked at sparsity in the time domain with respect to the actual time series of the audio sample. We also looked at the sparsity in the frequency domain under both uniform and log-scale transforms. To be more precise, we took short-term Fourier transforms, constant q transforms, and Mel transforms of the time series (using the implementations in the Python library Librosa\cite{mcfee2015librosa}) and counted the ratio of entries near zero. Due to noise and precision error, we assumed an entry was empty if the magnitude of the value was less than $10^{-5}$. There are also algorithms for extracting low rank matrices assuming one has sampled from noisy data\cite{negahban2011estimation}. We would have liked to have implemented and run one of these algorithms, using the derived rank as a measure of sparsity, but we did not have time to extract this feature.
 
@@ -200,6 +200,16 @@ We additionally note that the original definition of homogeneity was given with 
 In this paper we decided to use the first through fourth moments of the time series and various sub-bands of the audio signal. In particular we compute the short-term Fourier transforms, constant q transforms, and Mel transforms of the time series. We further computed the amplitude envelopes of these waveforms and took the corresponding short-term Fourier transforms, constant q transforms, or Mel transforms of the resulting amplitude envelope following the auditory model in \cite{McDermott2011926, mcdermott2013summary}. We would have also liked to look at the temporal homogeneity of the cross-correlation of the bands, capturing all of the statistics used in that paper.
 
 \xxx{Give formal and informal definitions of the features we used}
+
+\subsection{Compression Rate}
+
+\begin{definition}
+Given a compression scheme, the {\em compression rate} of a file is equal to \[\frac{\text{size of uncompressed file (B)}}{\text{size of compressed file (B)}}.\]  
+\end{definition}
+
+In this paper, we used the lossy variable-bitrate Ogg Vorbis format.
+
+\subsection{}
 
 \section{Methods}
 \label{sec:methods}

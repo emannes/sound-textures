@@ -11,6 +11,8 @@ from sklearn import linear_model
 from sklearn import preprocessing
 import cPickle as pickle
 
+MAX_FEATURES = 15
+
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
 moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
 
@@ -46,25 +48,36 @@ def feature_vector(base_name):
 
 def lasso(training, validation, alpha):
     model = linear_model.Lasso(alpha=alpha)
-    model.fit(training[:,:-1], training[:, -1])
-    print model.score(validation[:,:-1], validation[:, -1])
+    model.fit(training[:,:MAX_FEATURES], training[:, -1])
+    print model.score(validation[:,:MAX_FEATURES], validation[:, -1])
     return model
 
-fvs = np.array([feature_vector(base_name) for base_name in base_names])
-fvs = preprocessing.scale(fvs, axis=1)
-print fvs.mean(axis=0), fvs.std(axis=0)
-print fvs.mean(axis=1), fvs.std(axis=1)
+fvs = [feature_vector(base_name) for base_name in base_names]
+#fvs = preprocessing.scale(fvs, axis=1)
+
+goodlength = max([len(row) for row in fvs])
+goodis = [i for i in range(len(row)) if len(fvs[i]) == goodlength]
+fvs2 = np.array([fvs[i] for i in goodis])
+goodys = [ys[i] for i in goodis]
+
+fvs3 = np.c_[fvs2, goodys]
+
+
+fvsfile = open('fvs2.pkl','w')
+pickle.dump([fvs, goodis, fvs3], fvsfille)
+fvsfile.close()
+
+"""
+fvsfile = open('fvs.pkl','r')
+fvs = pickle.load(fvsfile)
+fvsfile.close()
+"""
+fvs = fvs3
 
 tr_len = len(fvs)/2
 val_len = len(fvs)/4
 
-fvs = np.c_[fvs, ys]
-
-fvsfile = open('fvs.pkl','w')
-pickle.dump(fvs, fvsfille)
-fvsfile.close()
-
 fvs = np.random.permutation(fvs)
 
-alphas = [10** i for i in range(-8,4)]
+alphas = [10** i for i in range(-8,10)]
 models = [lasso(fvs[:tr_len], fvs[tr_len:tr_len + val_len], alpha) for alpha in alphas]
