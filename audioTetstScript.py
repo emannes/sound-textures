@@ -61,10 +61,25 @@ def calculateVarStatisticOfArray(signal, statistic, windowSize):
     #print len(fSpectraVar)
     return signalStatisticVar
         
-bands = twoLayerTransform(filename, librosa.cqt)
-print bands.shape
-print bands[0][0]
-print calculateVarStatisticOfArray(bands[0],np.mean,5)
+#bands = twoLayerTransform(filename, librosa.cqt)
+#print bands.shape
+#print bands[0][0]
+#print calculateVarStatisticOfArray(bands[0],np.mean,5)
+
+def calculateModulationSubbandKStatisticTimeHomogineity(filename, spectraTransform, statistic, windowSize):
+    bands = twoLayerTransform(filename, spectraTransform)
+    
+    bandHomogineity = []
+    #for i in range(len(bands)):
+    for j in bands:
+        bandHomogineity.append(calculateVarStatisticOfArray(j, statistic, windowSize))
+
+    bandHomogineity = np.array(bandHomogineity)
+    print "bandHomogineity size ", bandHomogineity.shape        
+        
+    return bandHomogineity
+
+print calculateModulationSubbandKStatisticTimeHomogineity(filename, librosa.cqt, np.mean, 5)   
 
 ##calculates the Time Homogineity of the function f given a base window size
 ##func accepts a time searies and retuns a number.

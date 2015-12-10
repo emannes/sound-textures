@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import scipy
 
 defaultEpsilon = 10**-4
+defaultBandNumber1 = 6
+defaultBandNumber2 = 30
 
 def ExtractTemporalSparcity(filename, epsilon=defaultEpsilon):
     
@@ -205,3 +207,52 @@ def calculateCrossCorrelations(filename, spectraTransform, n_bins=10):
     fSpectra = spectraTransform(f, n_bins=n_bins)
 
     return np.corrcoef(fSpectra)
+    
+def twoLayerTransform(filename, spectraTransform):
+    f, sr = librosa.load(filename)
+    
+    frequencySubbands = spectraTransform(f, n_bins=defaultBandNumber1, hop_length=64)
+ 
+    modulationSubbands = []
+    
+    for i in range(len(frequencySubbands)):
+        modulationEnvelope = np.abs(scipy.signal.hilbert(frequencySubbands[i]))
+#        print "modulatin envelope size ", len(modulationEnvelope)
+        modulationSubbands.append(spectraTransform(modulationEnvelope, n_bins=defaultBandNumber2, hop_length=64))
+        
+    return np.array(modulationSubbands)
+    
+def calculateVarStatisticOfArray(signal, statistic, windowSize):
+    signalStatistic = []
+    fArray = []
+    for i in range(len(signal)):
+        signalStatistic.append(statistic(signal[i]))
+        fArray.append([])
+        for j in range(signal[i].size - windowSize):
+            fArray[i].append(statistic(signal[i][j:j+windowSize]))
+    #print "fSpectraAve ", fSpectraAve
+    #print len(fSpectraAve)
+    #print fSpectra.shape
+    signalStatisticVar = []
+    for i in range(len(signalStatistic)):
+        signalStatisticVar.append(0)
+        for j in signal[i]:
+            signalStatisticVar[i] += (j-signalStatistic[i])**2
+        signalStatisticVar[i] /= len(signal[i])
+
+    #print len(fSpectraVar)
+    return signalStatisticVar
+        
+
+def calculateModulationSubbandKStatisticTimeHomogineity(filename, spectraTransform, statistic, windowSize):
+    bands = twoLayerTransform(filename, spectraTransform)
+    
+    bandHomogineity = []
+    #for i in range(len(bands)):
+    for j in bands:
+        bandHomogineity.append(calculateVarStatisticOfArray(j, statistic, windowSize))
+
+    bandHomogineity = np.array(bandHomogineity)
+    print "bandHomogineity size ", bandHomogineity.shape        
+        
+    return bandHomogineity
