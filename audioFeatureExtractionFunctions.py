@@ -14,18 +14,14 @@ defaultEpsilon = 10**-4
 defaultBandNumber1 = 6
 defaultBandNumber2 = 30
 
-def ExtractTemporalSparcity(filename, epsilon=defaultEpsilon):
-    
-    f, sr = librosa.load(filename)
+def ExtractTemporalSparcity(f, epsilon=defaultEpsilon):
     
     timeEpsilonSparcityMatrix = (f > epsilon)
     timeEpsilonSparcity = float(f.size-np.count_nonzero(timeEpsilonSparcityMatrix))/f.size
     
     return timeEpsilonSparcity
 
-def ExtractMelSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
-    
-    f, sr = librosa.load(filename)    
+def ExtractMelSpectraSparcityFeatures(f, epsilon=defaultEpsilon):
     
     melspectra = librosa.feature.melspectrogram(f)   
     
@@ -55,9 +51,7 @@ def ExtractMelSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     return melEpsilonSparcity, melBandSparcity, melBandSparcityTimeAve
 
-def ExtractCQSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
-    
-    f, sr = librosa.load(filename)    
+def ExtractCQSpectraSparcityFeatures(f, epsilon=defaultEpsilon):
     
     cqtspectra = librosa.cqt(f)   
     
@@ -88,9 +82,7 @@ def ExtractCQSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     return cqtEpsilonSparcity, cqtBandSparcity, cqtBandSparcityTimeAve
     
     
-def ExtractSTFTSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
-    
-    f, sr = librosa.load(filename)    
+def ExtractSTFTSpectraSparcityFeatures(f, epsilon=defaultEpsilon):
     
     stftspectra = librosa.stft(f)   
     
@@ -120,8 +112,7 @@ def ExtractSTFTSpectraSparcityFeatures(filename, epsilon=defaultEpsilon):
     
     return stftEpsilonSparcity, stftBandSparcity, stftBandSparcityTimeAve
 
-def calculateRMSETimeHomogeneity(filename):
-    f, sr = librosa.load(filename)
+def calculateRMSETimeHomogeneity(f):
     
     rmse = librosa.feature.rmse(f)
     
@@ -135,8 +126,14 @@ def calculateRMSETimeHomogeneity(filename):
     
     return rmseVar
 
-def calculateSpectraAverageTimeHomogineity(filename, spectraTransform, windowSize):
-    f, sr = librosa.load(filename)
+def calculateRMSE(f):
+    
+    rmse = librosa.feature.rmse(f)
+    
+    return np.mean(rmse)
+
+
+def calculateSpectraAverageTimeHomogineity(f, spectraTransform, windowSize):
 
     fSpectra = spectraTransform(f)
 
@@ -164,8 +161,7 @@ def calculateSpectraAverageTimeHomogineity(filename, spectraTransform, windowSiz
 #print calculateSpectraAverageTimeHomogineity(filename, librosa.cqt, 10)
 #print calculateSpectraAverageTimeHomogineity(filename, librosa.feature.melspectrogram, 10)
 
-def calculateSpectraStatisticTimeHomogeneity(filename, spectraTransform, statistic, windowSize):
-    f, sr = librosa.load(filename)
+def calculateSpectraStatisticTimeHomogeneity(f, spectraTransform, statistic, windowSize):
 
     fSpectra = spectraTransform(f)
 
@@ -189,27 +185,25 @@ def calculateSpectraStatisticTimeHomogeneity(filename, spectraTransform, statist
     #print len(fSpectraVar)
     return fSpectraVar
     
-def calculateSpectraVarianceTimeHomogeneity(filename, spectraTransform, windowSize):
-    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, np.var, windowSize)   
+def calculateSpectraVarianceTimeHomogeneity(f, spectraTransform, windowSize):
+    return calculateSpectraStatisticTimeHomogineity(f, spectraTransform, np.var, windowSize)   
     
 #print calculateSpectraVarianceTimeHomogeneity(filename, librosa.cqt, 10)
 
-def calculateSpectraSkewTimeHomogeneity(filename, spectraTransform, windowSize):
-    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.skews, windowSize)   
+def calculateSpectraSkewTimeHomogeneity(f, spectraTransform, windowSize):
+    return calculateSpectraStatisticTimeHomogineity(f, spectraTransform, scipy.stats.skews, windowSize)   
     
 #print calculateSpectraVarianceTimeHomogeneity(filename, librosa.cqt, 10)
 
-def calculateSpectraKurtosisTimeHomogeneity(filename, spectraTransform, windowSize):
-    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
+def calculateSpectraKurtosisTimeHomogeneity(f, spectraTransform, windowSize):
+    return calculateSpectraStatisticTimeHomogineity(f, spectraTransform, scipy.stats.kurtosis, windowSize)   
 
-def calculateCrossCorrelations(filename, spectraTransform, n_bins=defaultBandNumber1):
-    f, sr = librosa.load(filename)
+def calculateCrossCorrelations(f, spectraTransform, n_bins=defaultBandNumber1):
     fSpectra = spectraTransform(f, n_bins=n_bins)
 
     return np.corrcoef(fSpectra)
     
-def twoLayerTransform(filename, spectraTransform):
-    f, sr = librosa.load(filename)
+def twoLayerTransform(f, spectraTransform):
     
     frequencySubbands = spectraTransform(f, n_bins=defaultBandNumber1, hop_length=64)
  
@@ -244,8 +238,8 @@ def calculateVarStatisticOfArray(signal, statistic, windowSize):
     return signalStatisticVar
         
 
-def calculateModulationSubbandKStatisticTimeHomogineity(filename, spectraTransform, statistic, windowSize):
-    bands = twoLayerTransform(filename, spectraTransform)
+def calculateModulationSubbandKStatisticTimeHomogineity(f, spectraTransform, statistic, windowSize):
+    bands = twoLayerTransform(f, spectraTransform)
     
     bandHomogineity = []
     #for i in range(len(bands)):
