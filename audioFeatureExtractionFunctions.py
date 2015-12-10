@@ -164,10 +164,10 @@ def calculateSpectraAverageTimeHomogineity(filename, spectraTransform, windowSiz
 #print calculateSpectraAverageTimeHomogineity(filename, librosa.cqt, 10)
 #print calculateSpectraAverageTimeHomogineity(filename, librosa.feature.melspectrogram, 10)
 
-def calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, statistic, windowSize, n_bins=10):
+def calculateSpectraStatisticTimeHomogeneity(filename, spectraTransform, statistic, windowSize):
     f, sr = librosa.load(filename)
 
-    fSpectra = spectraTransform(f, n_bins=n_bins)
+    fSpectra = spectraTransform(f)
 
     fSpectraAve = []
     fArray = []
@@ -189,17 +189,17 @@ def calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, statist
     #print len(fSpectraVar)
     return fSpectraVar
     
-def calculateSpectraVarianceTimeHomogienity(filename, spectraTransform, windowSize):
+def calculateSpectraVarianceTimeHomogeneity(filename, spectraTransform, windowSize):
     return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, np.var, windowSize)   
     
-#print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+#print calculateSpectraVarianceTimeHomogeneity(filename, librosa.cqt, 10)
 
-def calculateSpectraSkewTimeHomogienity(filename, spectraTransform, windowSize):
+def calculateSpectraSkewTimeHomogeneity(filename, spectraTransform, windowSize):
     return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.skews, windowSize)   
     
-#print calculateSpectraVarianceTimeHomogienity(filename, librosa.cqt, 10)
+#print calculateSpectraVarianceTimeHomogeneity(filename, librosa.cqt, 10)
 
-def calculateSpectraKurtosisTimeHomogienity(filename, spectraTransform, windowSize):
+def calculateSpectraKurtosisTimeHomogeneity(filename, spectraTransform, windowSize):
     return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
 
 def calculateCrossCorrelations(filename, spectraTransform, n_bins=10):
