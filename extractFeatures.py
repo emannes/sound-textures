@@ -1,11 +1,12 @@
 from audioFeatureExtractionFunctions import *
 from common import base_names, ys
-from common import sound_path
+#from common import sound_path
 from common import normalized_path as sound_path
-#from compression import compression_rate
+from compression import compression_rate
 import librosa
 import numpy as np
 import scipy
+import cProfile
 from sklearn import linear_model
 
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
@@ -13,27 +14,28 @@ moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
 
 def feature_vector(base_name):
     print base_name
-    filename = sound_path(base_name)
+    f = sound_path(base_name)
+    f, sr = librosa.load(f)
 
     fv = np.array([])
-    fv = np.append(fv, calculateRMSE(filename))
+    fv = np.append(fv, calculateRMSE(f))
     fv = np.append(fv, compression_rate(base_name))
 
-    fv = np.append(fv, ExtractTemporalSparcity(filename))
-    fv = np.append(fv, ExtractMelSpectraSparcityFeatures(filename))
-    fv = np.append(fv, ExtractCQSpectraSparcityFeatures(filename))
-    fv = np.append(fv, ExtractSTFTSpectraSparcityFeatures(filename))
-    fv = np.append(fv, calculateRMSETimeHomogeneity(filename))
+    fv = np.append(fv, ExtractTemporalSparcity(f))
+    fv = np.append(fv, ExtractMelSpectraSparcityFeatures(f))
+    fv = np.append(fv, ExtractCQSpectraSparcityFeatures(f))
+    fv = np.append(fv, ExtractSTFTSpectraSparcityFeatures(f))
+    fv = np.append(fv, calculateRMSETimeHomogeneity(f))
 
     """
     for spectrum in spectra:
         for moment in moments:
-            fv = np.append(fv, calculateSpectraStatisticTimeHomogeneity(filename, spectrum, moment, 10))
+            fv = np.append(fv, calculateSpectraStatisticTimeHomogeneity(f, spectrum, moment, 10))
     """
-    fv = np.append(fv, calculateCrossCorrelations(filename, spectra[0]))
-#    fv = np.append(fv, twoLayerTransform(filename, spectra[0]))
-#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(filename, spectra[0], np.mean, 10))
-#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(filename, spectra[0], np.var, 10))
+    fv = np.append(fv, calculateCrossCorrelations(f, spectra[0]))
+#    fv = np.append(fv, twoLayerTransform(f, spectra[0]))
+#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.mean, 10))
+#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.var, 10))
     
     return fv
 

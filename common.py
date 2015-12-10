@@ -28,7 +28,7 @@ with open(SCORES, 'r') as csvfile:
     reader = csv.reader(csvfile)
     rows = [row for row in reader]
 
-base_names = [row[0] for row in rows if row[0] not in BLACKLIST]l
+base_names = [row[0] for row in rows if row[0] not in BLACKLIST]
 ys = [float(row[1]) for row in rows if row[0] not in BLACKLIST]
     
 def normalize_all():
