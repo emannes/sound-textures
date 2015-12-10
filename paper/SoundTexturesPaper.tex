@@ -340,8 +340,6 @@ When we ran LASSO regressions, we consistently found that two features were of t
 
     In order to control for this effect, we normalized our recordings so that they had the same amplitude using the \texttt{librosa} Python package.
 
-\xxx{What correlated and what didn't? What feature (ensemble) lead to a good classifier?}
-
 \section{Conclusion}
 
 Out of the large number of features investigated, we've shown that none of them have predictive power when we normalized the amplitudes of our sound samples to fall in the same range. Although we have only ruled out their usefulness in predicting sound textures, it seems unlikely that they will be generally useful in other types of audio classification. Further, this negative result has implications in the understanding of sound textures and human audition. It suggests that one informal conjecture about the nature of sound textures is incorrect. This will hopefully spur a refinement of ideas and definitions surrounding sound textures and provide a useful piece of evidence when considering how to move forward. One might now believe the decision to throw away temporal information about an audio signal to be more nuanced than previously thought and hopefully further work on features such as temporal coincidence, reverberation, natural harmonics, and temporal regularity will now be increasingly motivated.
