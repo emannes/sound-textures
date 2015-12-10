@@ -1,16 +1,18 @@
 from audioFeatureExtractionFunctions import *
-from common import base_names, ys, sound_path
-from compression import compression_rate
+from common import base_names, ys
+from common import sound_path
+from common import normalized_path as sound_path
+#from compression import compression_rate
 import librosa
 import numpy as np
 import scipy
-import cProfile
 from sklearn import linear_model
 
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
 moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
 
 def feature_vector(base_name):
+    print base_name
     filename = sound_path(base_name)
 
     fv = np.array([])
