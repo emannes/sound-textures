@@ -1,10 +1,9 @@
-\documentclass{sig-alternate-05-2015}
-\usepackage[obey]{fixacm}
-
-%\usepackage[margin=1in]{geometry}
-%\usepackage{listings}
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{amsmath, amssymb, amsthm, amsfonts,cite,alltt,clrscode}
 \usepackage[english]{babel}
-%\usepackage{graphicx}
+\usepackage{graphicx}
 \usepackage{caption}
 \usepackage{accents}
 \usepackage[list=true,listformat=simple]{subcaption}
@@ -27,20 +26,20 @@
 
 % Compact mainlevel section titles, using \paragraph's while keeping numbering,
 % but without \appendix support.
-%{\makeatletter
-% \gdef\section{\@ifnextchar*\section@star\section@normal}
-% \gdef\section@normal#1{\refstepcounter{section}%
-%   \paragraph{\arabic{section}\hbox{~~}#1.}%
-%   \addcontentsline{toc}{section}{\protect\numberline{\arabic{section}}{#1}}}
-% \gdef\section@star*#1{\paragraph{#1.}}}
+{\makeatletter
+ \gdef\section{\@ifnextchar*\section@star\section@normal}
+ \gdef\section@normal#1{\refstepcounter{section}%
+   \paragraph{\arabic{section}\hbox{~~}#1.}%
+   \addcontentsline{toc}{section}{\protect\numberline{\arabic{section}}{#1}}}
+ \gdef\section@star*#1{\paragraph{#1.}}}
 
 % Compact subsection titles, using \paragraph's while keeping numbering.
-%{\makeatletter
-% \gdef\subsection{\@ifnextchar*\subsection@star\subsection@normal}
-% \gdef\subsection@normal#1{\refstepcounter{subsection}%
-%   \paragraph{\thesubsection\hbox{~~}#1.}%
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}{#1}}}
-% \gdef\subsection@star*#1{\paragraph{#1.}}}
+{\makeatletter
+ \gdef\subsection{\@ifnextchar*\subsection@star\subsection@normal}
+ \gdef\subsection@normal#1{\refstepcounter{subsection}%
+   \paragraph{\thesubsection\hbox{~~}#1.}%
+   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}{#1}}}
+ \gdef\subsection@star*#1{\paragraph{#1.}}}
 
 % Redefine paragraph to have no leading space, but rather indent.
 %{\makeatletter
@@ -48,28 +47,17 @@
 %   {\normalfont\normalsize\bfseries}}}
 
 % Tighter version of just \paragraph.
-%\newlength\aboveparagraphskip
-%\aboveparagraphskip=3.25ex plus 1ex minus .2ex
-%\newlength\belowparagraphskip
-%\belowparagraphskip=-1em
-%\makeatletter
-%\def\paragraph{\@startsection{paragraph}{4}{\z@}{-\aboveparagraphskip}%
-%                 {\belowparagraphskip}{\normalfont\normalsize\bfseries}}
-%\makeatother
-%\aboveparagraphskip=.5ex plus .5ex minus .25ex
-
-% Remove periods at ends of paragraphs in ACM sig-alternate format.
-{\makeatletter\gdef\@period{}}
-
-% Simple \paragraph in particular to clean up ACM sig-alternate format.
-\def\paragraph#1{\par\textbf{#1} }
+\newlength\aboveparagraphskip
+\aboveparagraphskip=3.25ex plus 1ex minus .2ex
+\newlength\belowparagraphskip
+\belowparagraphskip=-1em
+\makeatletter
+\def\paragraph{\@startsection{paragraph}{4}{\z@}{-\aboveparagraphskip}%
+                 {\belowparagraphskip}{\normalfont\normalsize\bfseries}}
+\makeatother
+\aboveparagraphskip=.5ex plus .5ex minus .25ex
 
 \fi
-
-% Force \boldmath in \section etc. titles without upsetting hyperref.
-% Warning: Redefines all instances of \bfseries to turn on \boldmath too.
-\let\realbfseries=\bfseries
-\def\bfseries{\realbfseries\boldmath}
 
 \urlstyle{same}
 
@@ -111,10 +99,15 @@
  %\long\gdef\xxx@lab[#1]#2{}\long\gdef\xxx@nolab#1{}%
 }
 
+{\catcode`\^^M=\active \gdef\tablines{\catcode`\^^M=\active \def^^M{\\}}}
+\newenvironment{pcode}{\tablines \topsep=0pt \partopsep=0pt \tabbing
+   MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=MM\=\kill}
+  {\endtabbing\vspace*{-0\baselineskip}}
+{\makeatletter \gdef\lasttab{\ifnum \@curtab<\@hightab \>\lasttab\fi}}
 
 % Compact list environments.  Note that itemize* and enumerate* use the
 % same counters and symbols as the usual itemize and enumerate environments.
-%\def\compactify{\itemsep=0pt \topsep=0pt \partopsep=0pt \parsep=0pt}
+\def\compactify{\itemsep=0pt \topsep=0pt \partopsep=0pt \parsep=0pt}
 \let\latexusecounter=\usecounter
 \newenvironment{itemize*}
   {\begin{itemize}\compactify}
@@ -142,36 +135,54 @@
 \let\epsilon=\varepsilon
 \let\keyw=\textbf
 
+%\newcommand{\lone}{l_{1/2}}
+%\newcommand{\ltwo}{l_{2/2}}
+\newcommand{\lone}{L[0\mathbin{:}\frac{n}{2}]}
+\newcommand{\ltwo}{L[\frac{n}{2}+1\mathbin{:}n-1]}
+\newcommand{\lsuper}{L}
+\newcommand{\lrtos}{\lsuper[r\mathbin{:}s]}
+\newcommand{\lstot}{\lsuper[s+1\mathbin{:}t]}
+\newcommand{\lrtot}{\lsuper[r\mathbin{:}t]}
+\newcommand{\lprime}{L'}
+\newcommand{\lprtot}{L'[r:t]}
 
 \begin{document}
 
 \title{Discriminating Sound Textures}
-
-
-\numberofauthors{2} 
-
-\auskip=0.5\auskip
-
-\author{
-\alignauthor
-  Jayson Lynch \\
-  \affaddr{MIT CSAIL}\\
-       \affaddr{32 Vassar Street}\\
-       \affaddr{Cambridge, MA 02139}\\
-       \email{jaysonl@mit.edu}
-\alignauthor Eric Mannes\\
-\affaddr{MIT CSAIL}\\
-       \affaddr{32 Vassar Street}\\
-       \affaddr{Cambridge, MA 02139}\\
-       \email{mannes@mit.edu}
-       }
-
+\author{%
+  Jayson Lynch%
+    \thanks{MIT Computer Science and Artificial Intelligence Laboratory,
+      32 Vassar Street, Cambridge, MA 02139, USA,
+      \protect\url{{jaysonl}@mit.edu}.}
+\and
+  Eric Mannes%  
+  \thanks{MIT Computer Science and Artificial Intelligence Laboratory,
+      32 Vassar Street, Cambridge, MA 02139, USA,
+      \protect\url{{mannes}@mit.edu}.}
+}
+\date{\today}
 \maketitle
 \begin{abstract}
-\xxx{write abstract}
+
+We show sound textures are cool stuff.
+
 \end{abstract}
 
-\keywords{Machine Learning, Sound Textures, Human Audition}
+\textbf{Keywords:} Machine Learning, Sound Textures, Audition
+
+\thispagestyle{empty}
+\setcounter{page}{-1}
+\pagebreak
+
+%\tableofcontents 
+%\vfil
+%\clearpage
+
+%\listoffigures 
+%\pagebreak
+
+%\listoftables
+%\pagebreak
 
 \section{Introduction} 
 This paper explores a new feature set for audio classification. Specifically, we look at a feature ensemble related to compressibility, sparsity, and temporal homogeneity in the problem of classifying audio signals as \emph{sound textures}. Sound textures, such as rain or crackling fire, are the result of many similar acoustic events. These sounds seem to form a cohesive auditory category which may be processed by the brain in a distinct fashion\cite{McDermott2011926, mcdermott2013summary}. Their study has partially been motivated by the analogous visual textures which comprise a significant body of literature. Tomita and Tsuji provide a book on the computational analysis of visual textures\cite{tomita2013computer}. The ideas that visual textures may be characterized by simple statistical features\cite{julesz1962visual} or atomistic units\cite{julesz1981textons} is carried over into some of the theory of sound textures. Recent work by McDermott and Simoncelli show many sound textures are well characterized by their time-averaged statistical properties\cite{McDermott2011926, mcdermott2013summary}. Saint-Arnaud's Master's Thesis attempts to extract the sound atoms that make up sound textures and use this as a basis for a classifier\cite{saint1995classification}. The thesis also discusses human perception of sound textures and the difficulties surrounding a good definition. A significant amount of the machine learning work in sound textures has been around synthesis often using wavelet hierarchies\cite{kersten2010sound} or sound atoms\cite{saint1995analysis}. Schwarz provides a general overview of methods as well as a classification scheme of the synthesis methods used\cite{schwarz2011state}.
@@ -219,7 +230,12 @@ There are a number of future directions left open by this paper. First, the spac
 
 We thank Prof Josh McDermott for his support in answering our questions about their research and providing us with their dataset. We also thank the course staff of 6.867 for their instruction and support this semester. In particular, we appreciate Marzyeh Ghassemi advice and guidance in shaping our project plan.
 
+% Decrease the space between bibliography items.
+\let\realbibitem=\bibitem
+\def\bibitem{\par \vspace{-1.5ex}\realbibitem}
+
 % bibliography
-\bibliographystyle{abbrv}
+\bibliographystyle{alpha}
 \bibliography{SoundTexturesBib}
 \end{document}
+
