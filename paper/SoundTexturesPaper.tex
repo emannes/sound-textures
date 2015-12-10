@@ -229,7 +229,7 @@ All of our models were written in Python with the help of a number of external l
 
 Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long in a .wav format. Of these, 28 were discard due to naming ambiguities which prevented them from being identified with the values in the paper. These samples included many examples of sound textures, such as four different wind samples and multiple different rain samples, as well as some audio files that are obviously not sound textures, such as person speaking English and various rhythmic drumbeats. The spectrograms of several samples can be seen in Figure~\ref{fig:spectrogramCompare} and Figure~\ref{fig:spectrograms} A full list can be found in Appendix~\ref{sec:dataset}. In the prior work, these samples were used to generate synthetic sounds with similar statistical properties and these synthetic sounds. An experiment was run where these synthetic sounds were given realism ratings by people on a scale of 1 to 7. Since \cite{mcdermott2013summary} showed that many sound textures seemed to be well characterized by these same sets of statistics, we use this realism score as a proxy for the `texturality' of the audio samples.
 
-  \begin{figure*}[hbt]
+  \begin{figure*}[hbt!]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
       \centering
@@ -256,7 +256,7 @@ Our dataset comes from the audio samples used in McDermott and Simoncelli's pape
     \label{fig:spectrogramCompare}
   \end{figure*}
   
-    \begin{figure*}[hbt]
+    \begin{figure*}[hbt!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
       \centering
@@ -303,17 +303,15 @@ Our dataset comes from the audio samples used in McDermott and Simoncelli's pape
     \label{fig:spectrograms}
   \end{figure*}
 
-    We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
-
-
-\xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
+  
+Our feature set contained a total of 7500 elements. Most of these were derived from the kth order statistics of the amplitude envelope sub-bands. Our other definitions comprised 49 different features. We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
 
 \section{Results}
 \label{sec:results}
 
 When we ran LASSO regressions, we consistently found that two features were of the most predictive value: the RMS energy of a sound and the time homogeneity of the RMS energy. A linear regression with either one of these features had $R^2$ of, on average, $.45$ on the test set. For sufficiently high regularization parameters, they were the only nonzero regression coefficients.
 
-    \begin{figure*}[hbt]
+    \begin{figure*}[hbt!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
       \centering
