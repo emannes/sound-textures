@@ -302,10 +302,8 @@ Our dataset comes from the audio samples used in McDermott and Simoncelli's pape
     \caption{Constant Q spectragrams of a variety of different sounds. The left column contains sound textures and the right does not.}
     \label{fig:spectrograms}
   \end{figure*}
-
-We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
-
-\xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
+  
+Our feature set contained a total of 7500 elements. Most of these were derived from the kth order statistics of the amplitude envelope sub-bands. Our other definitions comprised 49 different features. We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
 
 \section{Results}
 \label{sec:results}
