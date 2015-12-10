@@ -9,6 +9,7 @@ import scipy
 import cProfile
 from sklearn import linear_model
 from sklearn import preprocessing
+import cPickle as pickle
 
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
 moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
@@ -28,15 +29,18 @@ def feature_vector(base_name):
     fv = np.append(fv, ExtractSTFTSpectraSparcityFeatures(f))
     fv = np.append(fv, calculateRMSETimeHomogeneity(f))
 
+    for moment in moments:
+        fv = np.append(fv, calculateSpectraStatisticTimeHomogeneity(f, librosa.cqt, moment, 10))
+
     """
     for spectrum in spectra:
         for moment in moments:
             fv = np.append(fv, calculateSpectraStatisticTimeHomogeneity(f, spectrum, moment, 10))
     """
     fv = np.append(fv, calculateCrossCorrelations(f, spectra[0]))
-#    fv = np.append(fv, twoLayerTransform(f, spectra[0]))
-#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.mean, 10))
-#    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.var, 10))
+    fv = np.append(fv, twoLayerTransform(f, spectra[0]))
+    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.mean, 10))
+    fv = np.append(fv, calculateModulationSubbandKStatisticTimeHomogineity(f, spectra[0], np.var, 10))
     
     return fv
 
@@ -55,6 +59,10 @@ tr_len = len(fvs)/2
 val_len = len(fvs)/4
 
 fvs = np.c_[fvs, ys]
+
+fvsfile = open('fvs.pkl','w')
+pickle.dump(fvs, fvsfille)
+fvsfile.close()
 
 fvs = np.random.permutation(fvs)
 
