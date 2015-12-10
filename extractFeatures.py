@@ -62,12 +62,12 @@ def lasso2(training, validation, alpha,i):
     return model
 
 
-
-fvs = [feature_vector(base_name) for base_name in base_names]
-print fvs.shape
-#fvs = preprocessing.scale(fvs, axis=1)
-fvs = np.c_[fvs, ys]
 """
+fvs = np.array([feature_vector(base_name) for base_name in base_names])
+print fvs.shape
+fvs = preprocessing.scale(fvs, axis=1)
+fvs = np.c_[fvs, ys]
+
 goodlength = max([len(row) for row in fvs])
 goodis = [i for i in range(len(row)) if len(fvs[i]) == goodlength]
 fvs2 = np.array([fvs[i] for i in goodis])
@@ -79,18 +79,19 @@ fvs3 = np.c_[fvs2, goodys]
 fvsfile = open('fvs2.pkl','w')
 pickle.dump([fvs, goodis, fvs3], fvsfille)
 fvsfile.close()
-
-fvsfile = open('fvs2.pkl','r')
-fvs = pickle.load(fvsfile)[2]
-fvsfile.close()
 """
+fvsfile = open('fvsnormal.pkl','r')
+fvs = pickle.load(fvsfile)
+fvsfile.close()
+
+fvs = np.delete(fvs, [0,12], axis=1)
 
 tr_len = len(fvs)/2
 val_len = len(fvs)/4
 
 fvs = np.random.permutation(fvs)
 
-#fvs = np.delete(fvs, [0,12], axis=1)
+
 
 validation = fvs[tr_len:tr_len + val_len]
 
