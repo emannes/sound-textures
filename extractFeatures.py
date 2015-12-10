@@ -8,6 +8,7 @@ import numpy as np
 import scipy
 import cProfile
 from sklearn import linear_model
+from sklearn import preprocessing
 
 spectra = [librosa.cqt, librosa.stft, librosa.feature.melspectrogram]
 moments = [np.var, scipy.stats.skew, scipy.stats.kurtosis]
@@ -45,8 +46,11 @@ def lasso(training, validation, alpha):
     print model.score(validation[:,:-1], validation[:, -1])
     return model
 
+fvs = np.array([feature_vector(base_name) for base_name in base_names])
+fvs = preprocessing.scale(fvs, axis=1)
+print fvs.mean(axis=0), fvs.std(axis=0)
+print fvs.mean(axis=1), fvs.std(axis=1)
 
-fvs = [feature_vector(base_name) for base_name in base_names]
 tr_len = len(fvs)/2
 val_len = len(fvs)/4
 
