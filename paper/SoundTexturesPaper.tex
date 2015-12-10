@@ -66,6 +66,12 @@
 
 \fi
 
+\usepackage[
+	counters = {theorem},
+	%title = {Omitted\ Proofs},
+	abstract, appendix
+]{magicappendix}
+
 % Force \boldmath in \section etc. titles without upsetting hyperref.
 % Warning: Redefines all instances of \bfseries to turn on \boldmath too.
 \let\realbfseries=\bfseries
@@ -201,7 +207,7 @@ In this paper we decided to use the first through fourth moments of the time ser
 
 All of our models were written in Python with the help of a number of external libraries. NumPy\cite{numpy} and Librosa\cite{mcfee2015librosa} were used for audio processing; SciPy\cite{scipy} provided a number of useful statistical methods; and scikit-learn\cite{scikit-learn} was used for our regression and classification.
 
-Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long. 
+Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long in a .wav format. Of these, 28 were discard due to naming ambiguities which prevented them from being identified with the values in the paper. These samples included many examples of sound textures, such as four different wind samples and multiple different rain samples, as well as some audio files that are obviously not sound textures, such as person speaking English and various rhythmic drumbeats. A full list can be found in Appendix~\ref{sec:dataset}. In the prior work, these samples were used to generate synthetic sounds with similar statistical properties and these synthetic sounds. An experiment was run where these synthetic sounds were given realism ratings by people on a scale of 1 to 7. Since \cite{mcdermott2013summary} showed that many sound textures seemed to be well characterized by these same sets of statistics, we use this realism score as a proxy for the `texturality' of the audio samples.
 
 \xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
 
@@ -222,4 +228,12 @@ We thank Prof Josh McDermott for his support in answering our questions about th
 % bibliography
 \bibliographystyle{abbrv}
 \bibliography{SoundTexturesBib}
+
+\later{
+\section{Dataset}
+\label{sec:dataset}
+}
+
+
+
 \end{document}
