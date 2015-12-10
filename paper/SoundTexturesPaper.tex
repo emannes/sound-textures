@@ -174,9 +174,9 @@ We show sound textures are cool stuff.
 \setcounter{page}{-1}
 \pagebreak
 
-\tableofcontents 
-\vfil
-\clearpage
+%\tableofcontents 
+%\vfil
+%\clearpage
 
 %\listoffigures 
 %\pagebreak
@@ -186,22 +186,35 @@ We show sound textures are cool stuff.
 
 \section{Introduction} 
 
-\paragraph{Stuff}
+
+
+Sound textures, such as rain or crackling fire, are the result of many similar acoustic events. 
+
+
+Recent work by McDermott and Simoncelli attempts to understand a special category of sounds called \emph{sound textures}\cite{McDermott2011926, mcdermott2013summary}. They show that for many sound textures, the salient features that cause humans to classify these sounds are controlled by a number of time-averaged statistics of the sounds. This leads to an interesting question of why some sounds seem to be identified by time-averaged properties, when many other, such as speech or music, depend strongly on their temporal structure. McDermott et. al. conjecture that the `sparsity' or `compressibility' are related to the sounds that are perceived in this way. In addition, they mention that sound textures are `temporally homogeneous' without giving formal definitions of these terms. This paper seeks to build upon these ideas both to investigate new features for audio classification as well as to lend evidence toward the previous conjectures about sound texture perception. We provide several formal definitions of audio compressibility, sparsity, and temporal homogeneity in Section~\ref{sec:definitions}. These are then extracted as a feature set and are used in a machine learning algorithm for sound textures, described in Section~\ref{sec:methods}.
+
+There has been other prior work on classifying sound textures. Saint-Arnaud's Master's Thesis attempts to extract the sound atoms that make up sound textures and use this as a basis for a classifier\cite{saint1995classification}. The thesis also discusses human perception of sound textures and the difficulties surrounding a good definition.
+
 
 \xxx{Cite McDermott's papers\cite{McDermott2011926, mcdermott2013summary} and why we care about these features/classification}
 
 \xxx{Cite some other audio/sound texture classification work.}
 
 \section{Definitions}
+\label{sec:definitions}
+We provide working definitions for examples of three main descriptors: sparsity, compressibility, and temporal homogeneity. Since these characteristics can be captured in different ways, which are not always equivalent, we choose to work with multiple formal definitions.
+
+Compressibility was the simplest to work out. We chose a standard lossy and lossless compression algorithm and measured the compression ratio for the .wav flies. In this case we used \xxx{what audio compression did we use?}
+
 
 \xxx{Give formal and informal definitions of the features we used}
 
 \section{Methods}
-
+\label{sec:methods}
 \xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
 
 \section{Results}
-
+\label{sec:results}
 \xxx{What coorilated and what didn't? What feature (ensemble) lead to a good classifier?}
 
 \section{Conclusion}
