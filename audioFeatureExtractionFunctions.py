@@ -202,7 +202,7 @@ def calculateSpectraSkewTimeHomogeneity(filename, spectraTransform, windowSize):
 def calculateSpectraKurtosisTimeHomogeneity(filename, spectraTransform, windowSize):
     return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
 
-def calculateCrossCorrelations(filename, spectraTransform, n_bins=10):
+def calculateCrossCorrelations(filename, spectraTransform, n_bins=defaultBandNumber1):
     f, sr = librosa.load(filename)
     fSpectra = spectraTransform(f, n_bins=n_bins)
 
