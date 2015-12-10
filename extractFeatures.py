@@ -1,7 +1,7 @@
 from audioFeatureExtractionFunctions import *
 from common import base_names, ys
-#from common import sound_path
-from common import normalized_path as sound_path
+from common import sound_path
+#from common import normalized_path as sound_path
 from compression import compression_rate
 import librosa
 import numpy as np
