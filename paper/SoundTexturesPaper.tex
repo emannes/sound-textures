@@ -308,6 +308,37 @@ We performed a linear regression with $L_1$ regularization with all of our featu
 
 \section{Results}
 \label{sec:results}
+
+When we ran LASSO regressions, we consistently found that two features were of the most predictive value: the RMS energy of a sound and the time homogeneity of the RMS energy. A linear regression with either one of these features had $R^2$ of, on average, $.45$ on the test set. 
+
+    \begin{figure*}[hbt]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/rms_energy.png}
+      \caption{Sound realism vs. RMS energy}
+      \label{fig:rmsenergy}
+    \end{subfigure}
+    \hfill 
+    \begin{subfigure}[b]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/rms_time_homogeneity.png}
+      \caption{Sound texture realism vs. RMS time homogeneity}
+      \label{fig:rmshomog}
+    \end{subfigure}
+    \\
+        \begin{subfigure}[b]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/rms_homogeneity_vs_energy.png}
+      \caption{RMS time homogeneity vs. RMS energy}
+      \label{fig:homogvsenergy}
+    \end{subfigure}
+    \end{figure*}
+
+    While this early success seemed promising, we realized that it was, in fact, a problem. The RMS energy of a sound is essentially its loudness. As seen in Figure~\ref{fig:rmsenergy}, the louder the recording, the more like a sound texture it was.
+
+    Because the degree to  which a sound is a sound texture is not based on how loud it is played, we assume that this is because of an artifact in how the sounds were recorded. Many things  that are clearly sound textures are quite loud (e.g.,  applause) or were likely recorded with a microphone close to the source of the sound (e.g., running water). On the other hand, sounds that are definitely not sound textures, like speech or church  bells, may have been recorded at more of a distance.
+
 \xxx{What correlated and what didn't? What feature (ensemble) lead to a good classifier?}
 
 \section{Conclusion}
