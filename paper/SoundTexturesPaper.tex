@@ -302,8 +302,9 @@ Our dataset comes from the audio samples used in McDermott and Simoncelli's pape
     \caption{Constant Q spectragrams of a variety of different sounds. The left column contains sound textures and the right does not.}
     \label{fig:spectrograms}
   \end{figure*}
+
   
-Our feature set contained a total of 7500 elements. Most of these were derived from the kth order statistics of the amplitude envelope sub-bands. Our other definitions comprised 49 different features. We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
+Our feature set contained a total of 7500 elements. Most of these were derived from the kth order statistics of the amplitude envelope sub-bands. Our other definitions comprised 49 different features. We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. 
 
 \section{Results}
 \label{sec:results}
@@ -338,7 +339,9 @@ When we ran LASSO regressions, we consistently found that two features were of t
 
     Because the degree to  which a sound is a sound texture is not based on how loud it is played, we assume that this is because of an artifact in how the sounds were recorded. Many things  that are clearly sound textures are quite loud (e.g.,  applause) or were likely recorded with a microphone close to the source of the sound (e.g., running water). On the other hand, sounds that are definitely not sound textures, like speech or church  bells, may have been recorded at more of a distance.
 
-    In order to control for this effect, we normalized our recordings so that they had the same amplitude using the \texttt{librosa} Python package.
+    In order to control for this effect, we normalized our recordings by dividing by the amplitude using the \texttt{librosa} Python package.\footnote{We also tried to normalize them by dividing by the RMS amplitude; the results were the same.} With this normalization, the same LASSO regression gave an $R^2$ of $.10$ on the test data set, and the only nonzero regression coefficients were RMS energy, RMS homogeneity, and compressibility.
+
+    Because we were concerned that the same effect as before was leaking in in spite of our normalization, we excluded RMS energy and RMS homogeneity altogether. Without them, our LASSO model had an $R^2$ of $-.1$ on the test data set. We conclude that our ensemble of features, apart from the effects of RMS energy and homogeneity, were not predictive of whether something  was a sound texture.
 
 \section{Conclusion}
 
