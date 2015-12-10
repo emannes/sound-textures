@@ -17,6 +17,41 @@ f, sr = librosa.load(filename)
 defaultBandNumber1 = 6
 defaultBandNumber2 = 30
 
+def makeSpectragrams(filename):
+    f, sr = librosa.load(filename)
+    print "first"
+    melSpectra = librosa.feature.melspectrogram(f)
+    cqtSpectra = librosa.cqt(f)
+    print "stuff"
+    librosa.display.specshow(melSpectra)
+#    plt.specgram(melSpectra)
+    imageName = filename, "MelSpectragram.png"
+    title = 'Mel Spectrogram \nof '+ filename[26:]
+    plt.title(title)
+    plt.ion()
+    #plt.savefig(imageName)
+    plt.show()
+    
+    librosa.display.specshow(cqtSpectra)
+    title = 'Constant Q Spectrogram \nof '+ filename[26:]
+    plt.title(title)
+    #plt.spectrogram(cqtSpectra)
+    plt.show()
+    
+    return True
+    
+makeSpectragrams("Final_Set5_Norm_Originals/norm_Applause_01_big.wav")
+makeSpectragrams("Final_Set5_Norm_Originals/norm_SE2-67 Insects In A Swamp.wav")
+makeSpectragrams("Final_Set5_Norm_Originals/norm_ASE-15 Bathroom Sink.wav")
+makeSpectragrams("Final_Set5_Norm_Originals/norm_CSE-22 Pneumatic drills at road works.wav")
+
+makeSpectragrams("Final_Set5_Norm_Originals/norm_English_ex1.wav")
+makeSpectragrams("Final_Set5_Norm_Originals/norm_ESE-68 Church bells.wav")    
+makeSpectragrams("Final_Set5_Norm_Originals/norm_rhythm_1_2_3.wav")    
+
+
+
+
 
 def twoLayerTransform(filename, spectraTransform):
     f, sr = librosa.load(filename)
@@ -79,7 +114,7 @@ def calculateModulationSubbandKStatisticTimeHomogineity(filename, spectraTransfo
         
     return bandHomogineity
 
-print calculateModulationSubbandKStatisticTimeHomogineity(filename, librosa.cqt, np.mean, 5)   
+#print calculateModulationSubbandKStatisticTimeHomogineity(filename, librosa.cqt, np.mean, 5)   
 
 ##calculates the Time Homogineity of the function f given a base window size
 ##func accepts a time searies and retuns a number.
