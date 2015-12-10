@@ -26,14 +26,14 @@ def makeSpectragrams(filename):
     librosa.display.specshow(melSpectra)
 #    plt.specgram(melSpectra)
     imageName = filename, "MelSpectragram.png"
-    title = 'Mel Spectrogram of '+ filename[26:]
+    title = 'Mel Spectrogram \nof '+ filename[26:]
     plt.title(title)
     plt.ion()
     #plt.savefig(imageName)
     plt.show()
     
     librosa.display.specshow(cqtSpectra)
-    title = 'Constant Q Spectrogram of '+ filename[26:]
+    title = 'Constant Q Spectrogram \nof '+ filename[26:]
     plt.title(title)
     #plt.spectrogram(cqtSpectra)
     plt.show()
@@ -41,6 +41,7 @@ def makeSpectragrams(filename):
     return True
     
 makeSpectragrams("Final_Set5_Norm_Originals/norm_Applause_01_big.wav")
+makeSpectragrams("Final_Set5_Norm_Originals/norm_SE2-67 Insects In A Swamp.wav")
 makeSpectragrams("Final_Set5_Norm_Originals/norm_ASE-15 Bathroom Sink.wav")
 makeSpectragrams("Final_Set5_Norm_Originals/norm_CSE-22 Pneumatic drills at road works.wav")
 
