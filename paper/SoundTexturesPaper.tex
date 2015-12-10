@@ -204,10 +204,11 @@ In this paper we decided to use the first through fourth moments of the time ser
 \section{Methods}
 \label{sec:methods}
 
-
 All of our models were written in Python with the help of a number of external libraries. NumPy\cite{numpy} and Librosa\cite{mcfee2015librosa} were used for audio processing; SciPy\cite{scipy} provided a number of useful statistical methods; and scikit-learn\cite{scikit-learn} was used for our regression and classification.
 
 Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long in a .wav format. Of these, 28 were discard due to naming ambiguities which prevented them from being identified with the values in the paper. These samples included many examples of sound textures, such as four different wind samples and multiple different rain samples, as well as some audio files that are obviously not sound textures, such as person speaking English and various rhythmic drumbeats. A full list can be found in Appendix~\ref{sec:dataset}. In the prior work, these samples were used to generate synthetic sounds with similar statistical properties and these synthetic sounds. An experiment was run where these synthetic sounds were given realism ratings by people on a scale of 1 to 7. Since \cite{mcdermott2013summary} showed that many sound textures seemed to be well characterized by these same sets of statistics, we use this realism score as a proxy for the `texturality' of the audio samples.
+
+We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}
 
 \xxx{Describe how we set up our feature extraction. How we set up our learning. What our dataset is. Any other important process things.}
 
@@ -225,15 +226,571 @@ There are a number of future directions left open by this paper. First, the spac
 
 We thank Prof Josh McDermott for his support in answering our questions about their research and providing us with their dataset. We also thank the course staff of 6.867 for their instruction and support this semester. In particular, we appreciate Marzyeh Ghassemi advice and guidance in shaping our project plan.
 
-% bibliography
-\bibliographystyle{abbrv}
-\bibliography{SoundTexturesBib}
-
 \later{
 \section{Dataset}
 \label{sec:dataset}
+Dataset with realism ratings from \cite{McDermott2011926}.
+
+ Insects in swamp
+6.57 
+
+ Heavy rain on hard surface
+6.53 
+
+ Frogs
+6.53 
+
+ Rain
+6.47 
+
+ Applause 
+
+ big room
+6.43 
+
+ Radio static
+6.43 
+
+ Stream
+6.43 
+
+ Jungle rain
+6.40 
+
+ Air conditioner
+6.40 
+
+ Stream near small waterfall
+6.37 
+
+ Frogs
+6.37 
+
+ Frogs and insects
+6.37 
+
+ Frying eggs
+6.33 
+
+ Frogs
+6.33 
+
+ Wind 
+
+ blowing
+6.33 
+
+ Wind 
+
+ whistling
+6.33 
+
+ Insects during day in South
+6.30 
+
+ Radio static
+6.30 
+
+ Frogs
+6.30 
+
+ Heavy rain falling and dripping
+6.27 
+
+ Applause 
+
+ large crowd
+6.27 
+
+ River running over shallows
+6.27 
+
+ Construction site ambience
+6.23 
+
+ Waterfall
+6.20 
+
+ Sparrows 
+
+ large excited group
+6.17 
+
+ Pneumatic drills
+6.17 
+
+ Small river
+6.17 
+
+ Fast running river
+6.17 
+
+ Rain in woods
+6.13 
+
+ Water trickling into pool
+6.10 
+
+ Bathroom sink
+6.10 
+
+ Water running into sink
+6.03 
+
+ Frying bacon
+6.03 
+
+ Rain in ihe woods
+6.00 
+
+ Fire 
+
+ forest inferno
+5.97 
+
+ Birds in forest
+5.90 
+
+ Linotype
+5.90 
+
+ Bee swarm
+5.90 
+
+ Applause
+5.90 
+
+ Bath being drawn
+5.90 
+
+ Rustling paper
+5.87 
+
+ Train speeding down railroad tracks 
+
+ steam
+5.87 
+
+ Rattlesnake rattle
+5.83 
+
+ Fire 
+
+ burning room
+5.83 
+
+ Bubbling water
+5.83 
+
+ Fire 
+
+ burning room
+5.83 
+
+ Thunder and rain
+5.73 
+
+ Fire
+5.70 
+
+ Wind 
+
+ moaning
+5.70 
+
+ Bulldozer
+5.70 
+
+ Babble
+5.70 
+
+ Fire
+5.70 
+
+ Wind 
+
+ spooky
+5.70 
+
+ Water lapping gently
+5.67 
+
+ Shaking coins
+5.67 
+
+ Helicopter
+5.67 
+
+ Seagulls
+5.63 
+
+ Crunching cellophane
+5.63 
+
+ Sander
+5.60 
+
+ Radio static
+5.60 
+
+ Teletype 
+
+ city room
+5.57 
+
+ Steam shovel
+5.53 
+
+ Pigeons cooing
+5.50 
+
+ Metal lathe
+5.47 
+
+ Bee swarm
+5.47 
+
+ Lapping waves
+5.43 
+
+ Geese cackling
+5.40 
+
+ Train speeding down railroad tracks 
+
+ Diesel
+5.30 
+
+ Lake shore
+5.30 
+
+ Sanding by hand
+5.30 
+
+ Blender
+5.30 
+
+ Teletype
+5.30 
+
+ Birds in tropical forest
+5.27 
+
+ Drumroll
+5.27 
+
+ Surf hitting beach
+5.23 
+
+ Industrial machinery
+5.20 
+
+ Crowd noise
+5.20 
+
+ Rolling coin
+5.20 
+
+ Ducks quacking
+5.20 
+
+ WWII bomber plane
+5.17 
+
+ Applause
+5.17 
+
+ Idling boat
+5.17 
+
+ Jackhammer
+5.10 
+
+ Brushing teeth
+5.10 
+
+ Horse trotting on cobblestones
+5.07 
+
+ Scratching beard
+5.07 
+
+ Printing press
+5.07 
+
+ Writing with pen on paper
+5.00 
+
+ Train locomotive 
+
+ steam engine
+5.00 
+
+ Helicopter fly by
+4.97 
+
+ Pouring coins
+4.97 
+
+ Motorcycle idling
+4.97 
+
+ Fire
+4.93 
+
+ Crumpling paper
+4.87 
+
+ Ship anchor being raised
+4.87 
+
+ Jingling keys
+4.87 
+
+ Electric adding machine
+4.80 
+
+ Horse walking in snow
+4.73 
+
+ Cymbals shaking
+4.70 
+
+ Fire 
+
+ in chimney
+4.67 
+
+ Tambourine shaking
+4.67 
+
+ Pouring coins
+4.63 
+
+ Rhythmic applause
+4.63 
+
+ Cat lapping milk
+4.57 
+
+ Seaside waves
+4.43 
+
+ Rustling paper
+4.37 
+
+ Horse pulling wagon
+4.37 
+
+ Vacuum cleaner
+4.37 
+
+ Horse and carriage
+4.30 
+
+ Power saw
+4.30 
+
+ Tire rolling on gravel
+4.27 
+
+ Horse and buggy
+4.27 
+
+ Steam engine
+4.23 
+
+ Cement mixer
+4.23 
+
+ Power saw
+4.23 
+
+ Castanets
+4.23 
+
+ Ox cart
+4.20 
+
+ Battle explosions
+4.17 
+
+ Chickens squawking
+4.10 
+
+ Rubbing cloth
+4.03 
+
+ Rain beating against window panes
+3.97 
+
+ Typewriter 
+
+ IBM electric
+3.90 
+
+ Lawn mower
+3.77 
+
+ Gargling
+3.77 
+
+ Horse gallop on soft ground
+3.73 
+
+ Applause 
+
+ foreground clapper
+3.67 
+
+ Sawing by hand
+3.67 
+
+ Crumpling paper
+3.60 
+
+ Wolves howling
+3.60 
+
+ Fast breathing
+3.57 
+
+ Dogs
+3.40 
+
+ Out of breath
+3.23 
+
+ Windshield wipers
+3.20 
+
+ Pile driver
+3.13 
+
+ Silly mouth noise
+3.10 
+
+ Large diner
+3.00 
+
+ Filing metal
+2.90 
+
+ Typewriter 
+
+ manual
+2.83 
+
+ Fire alarm bell
+2.83 
+
+ Knife sharpening
+2.83 
+
+ Typewriter 
+
+ old
+2.70 
+
+ Pile driver
+2.70 
+
+ Clock ticking
+2.67 
+
+ Jogging on gravel
+2.67 
+
+ Castanets
+2.57 
+
+ Hammering copper
+2.47 
+
+ Laughter
+2.47 
+
+ Tapping rhythm
+2.37 
+
+ Running up stairs
+2.27 
+
+ Typewriter 
+
+ IBM selectric
+2.17 
+
+ Men marching together
+2.00 
+
+ Tapping on hard surface
+1.93 
+
+ Railroad crossing
+1.90 
+
+ Tapping 1
+
+2
+1.77 
+
+ Wind chimes
+1.77 
+
+ Corkscrew against desk edge
+1.70 
+
+ Reverse drum beats 
+
+ snare
+1.70 
+
+ Tapping  1
+
+2
+
+3
+1.67 
+
+ Snare drum beats
+1.63 
+
+ Walking on gravel
+1.60 
+
+ Snare rimshot sequence
+1.60 
+
+ Music 
+
+ Apache drum break
+1.50 
+
+ Music 
+
+ mambo
+1.50 
+
+ Bongo loop
+1.47 
+
+ Firecrackers
+1.40 
+
+ Person speaking French
+1.37 
+
+ Church bells
+1.20 
+
+ Person speaking Engli
 }
 
+
+% bibliography
+\bibliographystyle{abbrv}
+\bibliography{SoundTexturesBib}
 
 
 \end{document}
