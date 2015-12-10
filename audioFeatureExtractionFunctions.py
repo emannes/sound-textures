@@ -135,6 +135,14 @@ def calculateRMSETimeHomogeneity(filename):
     
     return rmseVar
 
+def calculateRMSE(filename):
+    f, sr = librosa.load(filename)
+    
+    rmse = librosa.feature.rmse(f)
+    
+    return np.mean(rmse)
+
+
 def calculateSpectraAverageTimeHomogineity(filename, spectraTransform, windowSize):
     f, sr = librosa.load(filename)
 
