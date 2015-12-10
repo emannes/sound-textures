@@ -1,0 +1,360 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{magicappendix}
+	[2012/10/19 v0.1 package for easy appendices]
+
+\RequirePackage{xkeyval}
+\RequirePackage{etoolbox}
+
+% ========================================================================
+% POTENTIAL IMPROVEMENTS
+% ========================================================================
+
+% BUG
+% figure out the Hampath bug that Zach talked about
+
+% FEATURE
+% maybe an environment for doing both / later
+
+% FEATURE
+% possibly allow multiple appendices, with syntax something like:
+%     \newappendix{blah}
+%     \blahlater{stuff}
+%     \blahboth{stuff}
+%     \defaultappendix{blah}
+%     \displayappendix{blah}
+% note that this may problematic for nested later/both commands
+% question: does this actually have a practical use?
+
+% ========================================================================
+% VARIABLES USED BY THIS PACKAGE
+% ========================================================================
+
+% the list of counters to store
+\newtoks\@ma@counters 
+
+% the contents of the appendix, to be set later
+\newtoks\@ma@appendix
+\@ma@appendix={}
+
+% the title of the appendix
+% not displayed by default
+\global\let\@ma@title=\relax
+
+% the "importance threshold," which determines which things
+% are important enough to include in the body of the paper
+% items with a higher importance level will be treated as normal
+% items with a lower importance level will be moved to the appendix
+% default importance level for \both and \later is 0.0
+% default importance threshold is 100
+\newdimen{\@ma@importance}
+\@ma@importance = 100pt
+
+% true if the paper should be displayed in abstract form
+\newif\ifabstract
+
+% true if the paper should be displayed in full form
+\newif\iffull
+
+% true if the abstract will include the appendix
+% does nothing if the paper is supposed to be full
+\newif\ifappendix
+
+% true if we're currently in the appendix
+\newif\iflater
+\laterfalse
+
+% ========================================================================
+% OPTIONS USED BY THIS PACKAGE
+% ========================================================================
+
+% get values from options passed in to the package
+\DeclareOptionX{counters}[]{%
+	\@ma@counters={#1}%
+}
+
+\DeclareOptionX{abstract}{\abstracttrue}
+\DeclareOptionX{full}{\fulltrue}
+\DeclareOptionX{appendix}{\appendixtrue}
+\DeclareOptionX{noappendix}{\appendixfalse}
+
+\DeclareOptionX{title}{%
+	\global\def\@ma@title{#1}%
+}
+
+\DeclareOptionX{importance}{%
+	\@ma@importance = #1pt%
+}
+
+\ProcessOptionsX
+
+% make sure the abstract / full options make sense
+\ifabstract
+	\iffull
+		\PackageError{magicappendix}{%
+			Full and abstract options are incompatible%
+		}{
+			To continue, please remove either 'full' or
+			'abstract' from the options passed to the
+			magicappendix package. 
+		}
+
+		% default to abstract, if they've done both
+		\fullfalse
+	\fi
+\else
+	\iffull
+	\else
+		% default to abstract
+		\abstracttrue
+	\fi
+\fi
+
+\iffull
+	\ifappendix
+		\PackageWarning{magicappendix}{%
+			using option 'appendix' with option 'full' does
+			nothing%
+		}
+	\fi
+\fi
+
+% ========================================================================
+% ASSORTED UTILITY FUNCTIONS
+% ========================================================================
+
+% copies the contents of a macro
+% takes as input the name of the macro to set
+% and the name of the macro to copy
+% note that the macro names passed in
+% should NOT be preceded by a backslash!
+\newcommand{\@ma@copy}[2]{
+	% build the command, then execute it
+	\edef\temp{%
+		\noexpand \global%
+		\noexpand \let%
+		\expandafter\noexpand\csname #1\endcsname%
+		\expandafter\noexpand\csname #2\endcsname%
+	}%
+	\temp%
+}
+
+% adds to the appendix without expanding
+\newcommand{\@ma@append@normal}[1]{%
+	\@ma@appendix=\expandafter{\the\@ma@appendix #1}%
+}
+
+% expands the argument fully, then adds it to the appendix
+\newcommand{\@ma@append@expanded}[1]{%
+	\edef\temp{\the\@ma@appendix #1}%
+	\@ma@appendix=\expandafter{\temp}%
+}
+
+% a command for doing nothing
+% useful when disabling things
+\newcommand{\@ma@disabled}[1]{}
+
+% ========================================================================
+% FUNCTIONS RELATED TO MAKING SURE COUNTERS WORK WELL
+% ========================================================================
+
+% code for initializing counters related to the original
+\newcommand\@ma@counters@init@one[1]{%
+	\newcounter{#1-saved}%
+	\@ma@copy{the#1-original}{the#1}%
+}
+
+% code run to save the current counter values
+\newcommand\@ma@counters@save@value[2]{%
+	\@ma@append@normal{%
+		\setcounter{#1}{#2}%
+	}%
+}
+
+\newcommand\@ma@counters@save@one[1]{%
+	\@ifundefined{c@#1}{%
+		\PackageWarning{magicappendix}{%
+			counter '#1' is not defined%
+		}%
+	}{%
+		\@ma@append@normal{%
+			\@ma@copy{the#1-appendix}{the#1}%
+			\@ma@copy{the#1}{the#1-original}%
+			\setcounter{#1-saved}{\arabic{#1}}%
+		}%
+		\@expandtwoargs\@ma@counters@save@value{#1}{\arabic{#1}}%
+	}%
+}
+
+% code run to restore the contents of the counters
+\newcommand\@ma@counters@restore@one[1]{%
+	\@ifundefined{c@#1}{%
+		\PackageWarning{magicappendix}{%
+			counter '#1' is not defined%
+		}%
+	}{%
+		\@ma@append@normal{%
+			\@ma@copy{the#1}{the#1-appendix}%
+			\setcounter{#1}{\arabic{#1-saved}}%
+		}%
+	}%
+}
+
+% loops for all of the above commands
+\newcommand{\@ma@counters@init}{%
+	\let\do=\@ma@counters@init@one%
+	\expandafter\docsvlist\expandafter{\the\@ma@counters}%
+}
+
+\newcommand\@ma@counters@save{%
+	\let\do=\@ma@counters@save@one%
+	\expandafter\docsvlist\expandafter{\the\@ma@counters}%
+}
+
+\newcommand\@ma@counters@restore{%
+	\let\do=\@ma@counters@restore@one%
+	\expandafter\docsvlist\expandafter{\the\@ma@counters}%
+}
+
+% make sure that all of the counters are correctly initialized
+\AtBeginDocument{%
+	\@ma@counters@init%
+}
+
+% ========================================================================
+% SET UP THE BOTH AND LATER COMMANDS
+% ========================================================================
+
+\ifabstract
+	\ifappendix
+		\newcommand{\@ma@later}[1]{%
+			\@ma@append@normal{
+
+				#1
+
+			}%
+		}
+		\newcommand{\@ma@both}[1]{%
+			\@ma@counters@save%
+			\@ma@append@normal{%
+				% disable the label command
+				\global\let\@ma@label=\label%
+				\global\let\label=\@ma@disabled%
+
+				% disable refstepcounter
+				\global\let\@ma@refstep=\refstepcounter
+				\global\let\refstepcounter=\stepcounter
+
+				#1
+
+				% reenable the label command
+				\global\let\label=\@ma@label%
+
+				% reenable refstepcounter
+				\global\let\refstepcounter=\@ma@refstep
+			}%
+			\@ma@counters@restore%
+			#1%
+		}
+	\else
+		\newcommand{\@ma@later}[1]{}
+		\newcommand{\@ma@both}[1]{#1}
+	\fi
+\else
+	\newcommand{\@ma@later}[1]{#1}
+	\newcommand{\@ma@both}[1]{#1}
+\fi
+
+\newif\if@ma@nested
+\@ma@nestedfalse
+
+% if this is nested inside a both/later command, show a warning
+% if the importance of the piece is high enough, treat it as normal
+\newcommand{\later}[2][0.0]{%
+	\if@ma@nested%
+		\PackageWarning{magicappendix}{%
+			nesting both/later commands may cause %
+			unexpected behavior%
+		}%
+		#2%
+	\else%
+		\ifdim #1pt < \@ma@importance%
+			\@ma@nestedtrue%
+			\@ma@later{#2}%
+			\@ma@nestedfalse%
+		\else%
+			#2%
+		\fi%
+	\fi%
+}
+
+% if this is nested inside a both/later command, show a warning
+% if the importance of the piece is high enough, treat it as normal
+\newcommand{\both}[2][0.0]{%
+	\if@ma@nested%
+		\PackageWarning{magicappendix}{%
+			nesting both/later commands may cause %
+			unexpected behavior%
+		}%
+		#2%
+	\else%
+		\ifdim #1pt < \@ma@importance%
+			\@ma@nestedtrue%
+			\@ma@both{#2}%
+			\@ma@nestedfalse%
+		\else%
+			#2%
+		\fi%
+	\fi%
+}
+
+% ========================================================================
+% FUNCTION TO DISPLAY THE APPENDIX
+% ========================================================================
+
+% whether the magic appendix has already been displayed
+\newif\if@ma@displayed
+\@ma@displayedfalse
+
+% make sure that we know when the user has called "\appendix"
+% helpful in making sure we don't do it twice
+\newif\if@ma@appendix@called
+\@ma@appendix@calledfalse
+
+\preto{\appendix}{%
+	\@ma@appendix@calledtrue%
+}
+
+% the command for showing the appendix in a particular location
+\def\magicappendix{%
+	\if@ma@displayed%
+		\PackageWarning{magicappendix}{%
+			displaying magic appendix twice%
+		}%
+	\fi%
+	\@ma@displayedtrue%
+	\latertrue%
+	\@ma@nestedtrue%
+	\ifx\relax\@ma@title\relax%
+	\else%
+		\section{\@ma@title}%
+	\fi%
+	\the\@ma@appendix%
+	\@ma@nestedfalse%
+	\laterfalse%
+}
+
+% setting up the appendix to display automatically
+% if it has not already been displayed
+\AtEndDocument{%
+	\ifappendix
+		\if@ma@displayed%
+		\else%
+			\clearpage%
+			\if@ma@appendix@called%
+			\else%
+				\appendix%
+			\fi%
+			\magicappendix%
+		\fi%
+	\fi
+}
