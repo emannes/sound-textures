@@ -188,51 +188,65 @@ McDermott and Simoncelli work shows that for many sound textures, the salient fe
 \label{sec:definitions}
 We provide working definitions for examples of three main descriptors: sparsity, compressibility, and temporal homogeneity. Since these characteristics can be captured in different ways, which are not always equivalent, we choose to work with multiple formal definitions.
 
-Compressibility was the simplest to work out. We chose a standard lossy compression algorithm and measured the compression ratio for the .wav flies. In this case we used the Ogg Vorbis variable-bitrate compression format.
-
-How to define sparsity was slightly less clear, since it usually refers to the quantity of zero entries with respect to some basis. To overcome this, we decided to use several natural representations. We looked at sparsity in the time domain with respect to the actual time series of the audio sample. We also looked at the sparsity in the frequency domain under both uniform and log-scale transforms. To be more precise, we took short-term Fourier transforms, constant q transforms, and Mel transforms of the time series (using the implementations in the Python library Librosa\cite{mcfee2015librosa}) and counted the ratio of entries near zero. Due to noise and precision error, we assumed an entry was empty if the magnitude of the value was less than $10^{-5}$. There are also algorithms for extracting low rank matrices assuming one has sampled from noisy data\cite{negahban2011estimation}. We would have liked to have implemented and run one of these algorithms, using the derived rank as a measure of sparsity, but we did not have time to extract this feature.
-
-Finally temporal homogeneity refers to consistency in the signal over time. Obviously we can't have everything be exactly the same, so one must pick specific features with which to check consistency. A paper on visual textures provides a precise definition: $X$ is homogeneous with respect to the function $\Phi: \mathbb{R}^L \rightarrow \mathbb{R}$ with tolerance $\epsilon$ and probability $p$ if the average of $\Phi$ over a sample $x \in X$ is a good approximation to the average of $\Phi$ over all of $X$ \cite{portilla2000parametric}.
-$$P_x(\mathrm{E}(\Phi(x)) - \mathrm{E}(\Phi(X)) < \epsilon) \geq p$$
-In practice, this definition is slightly cumbersome to use, and requires picking either our probability or threshold arbitrarily. In the same spirit, we instead decide to use the variance of a given statistic over a sample. Thus we calculate the inhomogeneity of $X$ with respect to $\Phi$ as $$\Sigma_{x\in X} (\Phi(x) - \mathrm{E}(\Phi(X))^2$$
-We additionally note that the original definition of homogeneity was given with respect to translations over a two dimensional space, whereas we take samples over a single time dimension.
-
-In this paper we decided to use the first through fourth moments of the time series and various sub-bands of the audio signal. In particular we compute the short-term Fourier transforms, constant q transforms, and Mel transforms of the time series. We further computed the amplitude envelopes of these waveforms and took the corresponding short-term Fourier transforms, constant q transforms, or Mel transforms of the resulting amplitude envelope following the auditory model in \cite{McDermott2011926, mcdermott2013summary}. We would have also liked to look at the temporal homogeneity of the cross-correlation of the bands, capturing all of the statistics used in that paper.
-
-\xxx{Give formal and informal definitions of the features we used}
-
 \subsection{Compression Rate}
+Compressibility was the simplest to work out. We chose a standard lossy compression algorithm and measured the compression ratio for the .wav flies. In this case we used the Ogg Vorbis variable-bitrate compression format.
 
 \begin{definition}
 Given a compression scheme, the {\em compression rate} of a file is equal to \[\frac{\text{size of uncompressed file (B)}}{\text{size of compressed file (B)}}.\]  
 \end{definition}
 
-In this paper, we used the lossy variable-bitrate Ogg Vorbis format.
+\subsection{Sparsity}
 
-\subsection{}
+How to define sparsity was slightly less clear, since it usually refers to the quantity of zero entries with respect to some basis. To overcome this, we decided to use several natural representations. We looked at sparsity in the time domain with respect to the actual time series of the audio sample. We also looked at the sparsity in the frequency domain under both uniform and log-scale transforms. To be more precise, we took short-term Fourier transforms, constant q transforms, and Mel transforms of the time series (using the implementations in the Python library Librosa\cite{mcfee2015librosa}) and counted the ratio of entries near zero. Due to noise and precision error, we assumed an entry was empty if the magnitude of the value was less than $10^{-5}$. There are also algorithms for extracting low rank matrices assuming one has sampled from noisy data\cite{negahban2011estimation}. We would have liked to have implemented and run one of these algorithms, using the derived rank as a measure of sparsity, but we did not have time to extract this feature.
+
+\subsection{Temporal Homogeneity}
+Temporal homogeneity refers to consistency in the signal over time. Obviously we can't have everything be exactly the same, so one must pick specific features with which to check consistency. A paper on visual textures provides a precise definition\cite{portilla2000parametric}.
+\begin{definition}
+$X$ is homogeneous with respect to the function $\Phi: \mathbb{R}^L \rightarrow \mathbb{R}$ with tolerance $\epsilon$ and probability $p$ if the average of $\Phi$ over a sample $x \in X$ is a good approximation to the average of $\Phi$ over all of $X$ 
+$$P_x(\mathrm{E}(\Phi(x)) - \mathrm{E}(\Phi(X)) < \epsilon) \geq p$$
+\end{definition}
+In practice, this definition is slightly cumbersome to use, and requires picking either our probability or threshold arbitrarily. In the same spirit, we instead decide to use the variance of a given statistic over a sample. Thus we calculate a related value we call the temporal inhomogeneity. 
+\begin{definition}
+The inhomogeneity of $X$ with respect to $\Phi$ is $$\Xi(X) = \Sigma_{x\in X} (\Phi(x) - \mathrm{E}(\Phi(X))^2$$
+\end{definition}
+We additionally note that the original definition of homogeneity was given with respect to translations over a two dimensional space, whereas we take samples over a single time dimension.
+
+In this paper we decided to use the first through fourth moments of the time series and various sub-bands of the audio signal. The $k^{th}$ moment of a continuious function $f(x)$ is $\mu_k = \int_{-\infty}^\infty x^kf(x)dx$. As with Fourier Transforms, we need a discrete analogue to calculate this for our signal, so instead we use the sample moment $\sigma_k = \frac{1}{n} \Sigma^n_{i=1} s_i^k$ where $s_i$ is our $i^{th}$ point in our signal.
+
+We still haven't fully specified our statistics. We decided to compute the temporal inhomogeneity of the first four moments of the short-term Fourier transforms, constant q transforms, and Mel transforms of the time series. We further computed the amplitude envelopes of these waveforms and took the corresponding short-term Fourier transforms, constant q transforms, or Mel transforms of the resulting amplitude envelope inspired by the auditory model in \cite{McDermott2011926, mcdermott2013summary}. Additionally, we computed the temporal inhomogeneity of the root mean square energy of the signal. We would have also liked to look at the temporal homogeneity of the cross-correlation of the bands, capturing all of the statistics used in that paper.
 
 \section{Methods}
 \label{sec:methods}
 
 All of our models were written in Python with the help of a number of external libraries. NumPy\cite{numpy} and Librosa\cite{mcfee2015librosa} were used for audio processing; SciPy\cite{scipy} provided a number of useful statistical methods; and scikit-learn\cite{scikit-learn} was used for our regression and classification.
 
-Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long in a .wav format. Of these, 28 were discard due to naming ambiguities which prevented them from being identified with the values in the paper. These samples included many examples of sound textures, such as four different wind samples and multiple different rain samples, as well as some audio files that are obviously not sound textures, such as person speaking English and various rhythmic drumbeats. A full list can be found in Appendix~\ref{sec:dataset}. In the prior work, these samples were used to generate synthetic sounds with similar statistical properties and these synthetic sounds. An experiment was run where these synthetic sounds were given realism ratings by people on a scale of 1 to 7. Since \cite{mcdermott2013summary} showed that many sound textures seemed to be well characterized by these same sets of statistics, we use this realism score as a proxy for the `texturality' of the audio samples.
+Our dataset comes from the audio samples used in McDermott and Simoncelli's paper\cite{McDermott2011926} as a basis for their synthetic sounds. The dataset contains 175 sound samples, all 7 seconds long in a .wav format. Of these, 28 were discard due to naming ambiguities which prevented them from being identified with the values in the paper. These samples included many examples of sound textures, such as four different wind samples and multiple different rain samples, as well as some audio files that are obviously not sound textures, such as person speaking English and various rhythmic drumbeats. The spectrograms of several samples can be seen in Figure~\ref{fig:spectrogramCompare} and Figure~\ref{fig:spectrogram} A full list can be found in Appendix~\ref{sec:dataset}. In the prior work, these samples were used to generate synthetic sounds with similar statistical properties and these synthetic sounds. An experiment was run where these synthetic sounds were given realism ratings by people on a scale of 1 to 7. Since \cite{mcdermott2013summary} showed that many sound textures seemed to be well characterized by these same sets of statistics, we use this realism score as a proxy for the `texturality' of the audio samples.
 
   \begin{figure*}[hbt]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figures/cqt_applause.png}
       \caption{Constant Q spectrogram of an applause sound sample.}
       \label{fig:cqt-applause}
     \end{subfigure}
     \hfill 
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figures/mel_applause.png}
       \caption{Mel spectrogram of an applause sound sample.}
       \label{fig:cqt-applause}
     \end{subfigure}
+        \hfill 
+    \begin{subfigure}[b]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/mel_applause.png}
+      \caption{Short Term Fourier Transform spectrogram of an applause sound sample.}
+      \label{fig:cqt-applause}
+    \end{subfigure}
+    
+    \caption{Three different spectrograms of the same sound sample of applause.}
+    \label{fig:spectrogramCompare}
   \end{figure*}
   
     \begin{figure*}[hbt]
@@ -278,6 +292,8 @@ Our dataset comes from the audio samples used in McDermott and Simoncelli's pape
       \caption{Constant Q spectrogram of a tapped rhythm.}
       \label{fig:cqt-applause}
     \end{subfigure}
+    \caption{Constant Q spectragrams of a variety of different sounds. The left column contains sound textures and the right does not.}
+    \label{fig:spectrograms}
   \end{figure*}
 
 We performed a linear regression with $L_1$ regularization with all of our features. Half of the data was randomly selected to be used as training data, one quarter was reserved for a validation step to select our regularization constant, and a quarter was reserved to determine our final r-squared values. \xxx{talk about feature normalization}

@@ -22,6 +22,7 @@ def makeSpectragrams(filename):
     print "first"
     melSpectra = librosa.feature.melspectrogram(f)
     cqtSpectra = librosa.cqt(f)
+    stftSpectra = librosa.stft(f)
     print "stuff"
     librosa.display.specshow(melSpectra)
 #    plt.specgram(melSpectra)
@@ -34,6 +35,12 @@ def makeSpectragrams(filename):
     
     librosa.display.specshow(cqtSpectra)
     title = 'Constant Q Spectrogram \nof '+ filename[26:]
+    plt.title(title)
+    #plt.spectrogram(cqtSpectra)
+    plt.show()
+    
+    librosa.display.specshow(stftSpectra)
+    title = 'STFT Spectrogram \nof '+ filename[26:]
     plt.title(title)
     #plt.spectrogram(cqtSpectra)
     plt.show()
