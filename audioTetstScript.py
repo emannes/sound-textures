@@ -14,7 +14,57 @@ import scipy
 
 filename = "Final_Set5_Norm_Originals/norm_Applause_01_big.wav"
 f, sr = librosa.load(filename)
+defaultBandNumber1 = 6
+defaultBandNumber2 = 30
 
+
+def twoLayerTransform(filename, spectraTransform):
+    f, sr = librosa.load(filename)
+    
+    print "f size ", f.size
+    
+    frequencySubbands = spectraTransform(f, n_bins=defaultBandNumber1, hop_length=64)
+    
+    print "frequencySubbands = ", frequencySubbands    
+    print frequencySubbands.shape
+
+    modulationSubbands = []
+    
+    for i in range(len(frequencySubbands)):
+        modulationEnvelope = np.abs(scipy.signal.hilbert(frequencySubbands[i]))
+        print "modulatin envelope size ", len(modulationEnvelope)
+        modulationSubbands.append(spectraTransform(modulationEnvelope, n_bins=defaultBandNumber2, hop_length=64))
+        
+    #print len(modulationSubbands)
+    #print len(modulationSubbands[0])
+    print np.array(modulationSubbands).shape
+    return np.array(modulationSubbands)
+    
+def calculateVarStatisticOfArray(signal, statistic, windowSize):
+    signalStatistic = []
+    fArray = []
+    for i in range(len(signal)):
+        signalStatistic.append(statistic(signal[i]))
+        fArray.append([])
+        for j in range(signal[i].size - windowSize):
+            fArray[i].append(statistic(signal[i][j:j+windowSize]))
+    #print "fSpectraAve ", fSpectraAve
+    #print len(fSpectraAve)
+    #print fSpectra.shape
+    signalStatisticVar = []
+    for i in range(len(signalStatistic)):
+        signalStatisticVar.append(0)
+        for j in signal[i]:
+            signalStatisticVar[i] += (j-signalStatistic[i])**2
+        signalStatisticVar[i] /= len(signal[i])
+
+    #print len(fSpectraVar)
+    return signalStatisticVar
+        
+bands = twoLayerTransform(filename, librosa.cqt)
+print bands.shape
+print bands[0][0]
+print calculateVarStatisticOfArray(bands[0],np.mean,5)
 
 ##calculates the Time Homogineity of the function f given a base window size
 ##func accepts a time searies and retuns a number.
@@ -66,15 +116,6 @@ def calculateKOrderStatistic(filename, k):
 def calculateVarKOrderStatistic(filename, k):
     f, sr = librosa.load(filename)
     return scipy.stats.kstatvar(f,k)
-
-print calculateKOrderStatistic(filename, 1)
-print calculateVarKOrderStatistic(filename, 1)
-print calculateKOrderStatistic(filename, 2)
-print calculateVarKOrderStatistic(filename, 2)
-print calculateKOrderStatistic(filename, 3)
-print calculateVarKOrderStatistic(filename, 3)
-print calculateKOrderStatistic(filename, 4)
-print calculateVarKOrderStatistic(filename, 4)
 
 #rmsenergy = librosa.feature.rmse(y=f)
 #melspectra = librosa.feature.melspectrogram(f)
@@ -219,4 +260,4 @@ print calculateVarKOrderStatistic(filename, 4)
 #
 #def calculateSpectraKurtosisTimeHomogienity(filename, spectraTransform, windowSize):
 #    return calculateSpectraStatisticTimeHomogineity(filename, spectraTransform, scipy.stats.kurtosis, windowSize)   
-#    
+   
